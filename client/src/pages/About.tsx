@@ -12,12 +12,12 @@ function About() {
     return () => clearTimeout(timer);
   }, []);
 
-  const teamMembers = [
-    { id: 1, name: "Alex Chen", role: "CEO & Founder", expertise: "Marketplace Strategy", delay: 0.1 },
-    { id: 2, name: "Maya Rodriguez", role: "CTO", expertise: "Platform Architecture", delay: 0.2 },
-    { id: 3, name: "James Wilson", role: "Head of Operations", expertise: "Service Provider Relations", delay: 0.3 },
-    { id: 4, name: "Sophie Williams", role: "Head of Product", expertise: "User Experience", delay: 0.4 },
-  ];
+  // const teamMembers = [
+  //   { id: 1, name: "Alex Chen", role: "CEO & Founder", expertise: "Marketplace Strategy", delay: 0.1 },
+  //   { id: 2, name: "Maya Rodriguez", role: "CTO", expertise: "Platform Architecture", delay: 0.2 },
+  //   { id: 3, name: "James Wilson", role: "Head of Operations", expertise: "Service Provider Relations", delay: 0.3 },
+  //   { id: 4, name: "Sophie Williams", role: "Head of Product", expertise: "User Experience", delay: 0.4 },
+  // ];
 
   const stats = [
     { number: "10K+", label: "Service Providers", icon: "👨‍🔧" },

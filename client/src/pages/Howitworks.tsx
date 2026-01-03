@@ -598,94 +598,94 @@ function SearchAndBook() {
 }
 
 /* ===== SUCCESS STORIES ===== */
-function SuccessStories() {
-  const storyRefs = useRef<(HTMLDivElement | null)[]>([]);
+// function SuccessStories() {
+//   const storyRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('success-story-visible');
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
+//   useEffect(() => {
+//     const observer = new IntersectionObserver(
+//       (entries) => {
+//         entries.forEach(entry => {
+//           if (entry.isIntersecting) {
+//             entry.target.classList.add('success-story-visible');
+//           }
+//         });
+//       },
+//       { threshold: 0.15 }
+//     );
 
-    storyRefs.current.forEach(story => {
-      if (story) observer.observe(story);
-    });
+//     storyRefs.current.forEach(story => {
+//       if (story) observer.observe(story);
+//     });
 
-    return () => observer.disconnect();
-  }, []);
+//     return () => observer.disconnect();
+//   }, []);
 
-  const stories = [
-    {
-      name: "Sarah Johnson",
-      role: "Freelance Photographer",
-      type: "Provider",
-      result: "Booked 50+ clients in first 3 months",
-      quote: "The platform helped me showcase my work and connect with clients who appreciate my style.",
-      image: "📸",
-      color: "#4A90E2"
-    },
-    {
-      name: "Mike Rodriguez",
-      role: "Homeowner",
-      type: "Seeker",
-      result: "Found perfect contractor in 24 hours",
-      quote: "Found a reliable plumber the same day I needed urgent repairs. The reviews were accurate!",
-      image: "🏠",
-      color: "#FF6B35"
-    },
-    {
-      name: "Tech Solutions LLC",
-      role: "IT Services Company",
-      type: "Provider",
-      result: "Tripled monthly bookings",
-      quote: "Listing our services with detailed packages and location-based targeting worked wonders.",
-      image: "💻",
-      color: "#00C896"
-    }
-  ];
+//   const stories = [
+//     {
+//       name: "Sarah Johnson",
+//       role: "Freelance Photographer",
+//       type: "Provider",
+//       result: "Booked 50+ clients in first 3 months",
+//       quote: "The platform helped me showcase my work and connect with clients who appreciate my style.",
+//       image: "📸",
+//       color: "#4A90E2"
+//     },
+//     {
+//       name: "Mike Rodriguez",
+//       role: "Homeowner",
+//       type: "Seeker",
+//       result: "Found perfect contractor in 24 hours",
+//       quote: "Found a reliable plumber the same day I needed urgent repairs. The reviews were accurate!",
+//       image: "🏠",
+//       color: "#FF6B35"
+//     },
+//     {
+//       name: "Tech Solutions LLC",
+//       role: "IT Services Company",
+//       type: "Provider",
+//       result: "Tripled monthly bookings",
+//       quote: "Listing our services with detailed packages and location-based targeting worked wonders.",
+//       image: "💻",
+//       color: "#00C896"
+//     }
+//   ];
 
-  return (
-    <section className="success-stories-section">
-      <div className="success-stories-header">
-        <h2 className="success-stories-title">Success Stories</h2>
-        <p className="success-stories-subtitle">
-          Real people achieving real results with our platform.
-        </p>
-      </div>
+//   return (
+//     <section className="success-stories-section">
+//       <div className="success-stories-header">
+//         <h2 className="success-stories-title">Success Stories</h2>
+//         <p className="success-stories-subtitle">
+//           Real people achieving real results with our platform.
+//         </p>
+//       </div>
       
-      <div className="success-stories-grid">
-        {stories.map((story, index) => (
-          <div
-            key={index}
-            ref={el => { storyRefs.current[index] = el; }}
-            className="success-story-card"
-            style={{ '--story-color': story.color } as React.CSSProperties}
-          >
-            <div className="success-story-badge">{story.type}</div>
-            <div className="success-story-image">{story.image}</div>
-            <div className="success-story-content">
-              <h3 className="success-story-name">{story.name}</h3>
-              <span className="success-story-role">{story.role}</span>
-              <div className="success-story-result">
-                <span className="success-story-result-icon">🎯</span>
-                {story.result}
-              </div>
-              <blockquote className="success-story-quote">
-                "{story.quote}"
-              </blockquote>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
+//       <div className="success-stories-grid">
+//         {stories.map((story, index) => (
+//           <div
+//             key={index}
+//             ref={el => { storyRefs.current[index] = el; }}
+//             className="success-story-card"
+//             style={{ '--story-color': story.color } as React.CSSProperties}
+//           >
+//             <div className="success-story-badge">{story.type}</div>
+//             <div className="success-story-image">{story.image}</div>
+//             <div className="success-story-content">
+//               <h3 className="success-story-name">{story.name}</h3>
+//               <span className="success-story-role">{story.role}</span>
+//               <div className="success-story-result">
+//                 <span className="success-story-result-icon">🎯</span>
+//                 {story.result}
+//               </div>
+//               <blockquote className="success-story-quote">
+//                 "{story.quote}"
+//               </blockquote>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </section>
+//   );
+// }
 
 /* ===== GET STARTED CTA ===== */
 function GetStartedCTA() {
