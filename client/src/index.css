@@ -1,0 +1,57 @@
+/* src/styles/globals.css */
+
+/* Reset default browser styles */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Set smooth font rendering */
+html {
+  scroll-behavior: smooth;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Set base body styles */
+body {
+  line-height: 1.6;
+  background-color: #ffffff; /* default background */
+  color: #1f2937; /* default text color */
+}
+
+/* Remove list styles */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Remove default link styles */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Remove default image styling */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Default button styles */
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Optional: set inputs & textareas to inherit font */
+input,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}

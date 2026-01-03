@@ -1,0 +1,661 @@
+/* ===== HELPR ABOUT PAGE STYLES ===== */
+
+.helpr-about-page-container {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f8fafc;
+  min-height: 100vh;
+  color: #333333;
+  overflow-x: hidden;
+}
+
+/* Hero Section */
+.helpr-about-hero {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  padding: 100px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.helpr-about-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #FF6B35, #FFA62B, #4A90E2, #7B68EE);
+  z-index: 1;
+}
+
+.helpr-about-hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.helpr-about-hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.helpr-about-hero-animate .helpr-about-hero-title {
+  animation: helpr-text-reveal 0.8s ease forwards;
+}
+
+.helpr-gradient-text {
+  background: linear-gradient(90deg, #FF6B35, #FFA62B);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.helpr-about-hero-subtitle {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #4a5568;
+  margin-bottom: 40px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.helpr-about-hero-animate .helpr-about-hero-subtitle {
+  animation: helpr-text-reveal 0.8s ease 0.2s forwards;
+}
+
+.helpr-about-hero-graphic {
+  max-width: 600px;
+  margin: 60px auto 0;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  opacity: 0;
+}
+
+.helpr-about-hero-graphic-animate {
+  animation: helpr-fade-in 1s ease 0.4s forwards;
+}
+
+.helpr-about-connecting-line {
+  position: absolute;
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(90deg, #FF6B35, #FFA62B, #4A90E2);
+  z-index: 1;
+}
+
+.helpr-about-provider-icon,
+.helpr-about-connection-icon,
+.helpr-about-customer-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  position: relative;
+  z-index: 2;
+  animation: helpr-float 3s ease-in-out infinite;
+}
+
+.helpr-about-provider-icon {
+  background: linear-gradient(135deg, #FF6B35, #FFA62B);
+  box-shadow: 0 8px 24px rgba(255, 107, 53, 0.25);
+  margin-right: 100px;
+}
+
+.helpr-about-connection-icon {
+  background: linear-gradient(135deg, #4A90E2, #7B68EE);
+  box-shadow: 0 8px 24px rgba(74, 144, 226, 0.25);
+  animation-delay: 0.5s;
+}
+
+.helpr-about-customer-icon {
+  background: linear-gradient(135deg, #2E8B57, #3CB371);
+  box-shadow: 0 8px 24px rgba(46, 139, 87, 0.25);
+  margin-left: 100px;
+  animation-delay: 1s;
+}
+
+/* Mission Section */
+.helpr-about-section {
+  padding: 80px 24px;
+}
+
+.helpr-about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.helpr-about-mission-card {
+  background: white;
+  border-radius: 20px;
+  padding: 60px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  max-width: 800px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.helpr-about-card-float {
+  animation: helpr-card-float 0.8s ease forwards;
+}
+
+.helpr-about-mission-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #FF6B35, #FFA62B);
+}
+
+.helpr-about-mission-icon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+  display: inline-block;
+  animation: helpr-bounce 2s ease infinite;
+}
+
+.helpr-about-section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.helpr-about-centered {
+  text-align: center;
+}
+
+.helpr-about-section-text {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: #4a5568;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Stats Section */
+.helpr-about-stats-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.helpr-about-section-subtitle {
+  font-size: 1.25rem;
+  color: #666;
+  margin-bottom: 60px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.helpr-about-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  margin-top: 60px;
+}
+
+.helpr-about-stat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px 24px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border-top: 4px solid #FF6B35;
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.helpr-about-stat-pop {
+  animation: helpr-stat-pop 0.6s ease forwards;
+}
+
+.helpr-about-stat-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.helpr-about-stat-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.helpr-about-stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, #FF6B35, #FFA62B);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.helpr-about-stat-label {
+  font-size: 1rem;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Steps Section */
+.helpr-about-steps {
+  max-width: 800px;
+  margin: 60px auto 0;
+  position: relative;
+}
+
+.helpr-about-step {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 50px;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.helpr-about-step-slide {
+  animation: helpr-slide-in 0.6s ease forwards;
+}
+
+.helpr-about-step:nth-child(even) {
+  transform: translateX(50px);
+}
+
+.helpr-about-step:nth-child(even).helpr-about-step-slide {
+  animation: helpr-slide-in-right 0.6s ease forwards;
+}
+
+.helpr-about-step-number {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #FF6B35, #FFA62B);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.helpr-about-step-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.helpr-about-step-content p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Values Section */
+.helpr-about-values-section {
+  background: white;
+}
+
+.helpr-about-values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 60px;
+}
+
+.helpr-about-value-card {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 40px 30px;
+  text-align: center;
+  border-top: 4px solid;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.helpr-about-value-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+.helpr-about-value-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  margin: 0 auto 24px;
+}
+
+.helpr-about-value-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.helpr-about-value-card p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Team Section */
+.helpr-about-team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 60px;
+}
+
+.helpr-about-team-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px 30px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.helpr-about-team-card-animate {
+  animation: helpr-card-float 0.6s ease forwards;
+}
+
+.helpr-about-team-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.helpr-about-team-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B35, #FFA62B);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+  font-weight: 700;
+  margin: 0 auto 24px;
+}
+
+.helpr-about-team-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.helpr-about-team-role {
+  color: #FF6B35;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.helpr-about-team-expertise {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* CTA Section */
+.helpr-about-cta {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%);
+  padding: 100px 24px;
+  text-align: center;
+  color: white;
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.helpr-about-cta-animate {
+  animation: helpr-cta-slide 0.8s ease forwards;
+}
+
+.helpr-about-cta-content h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #FFA62B, #FF6B35);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.helpr-about-cta-content p {
+  font-size: 1.25rem;
+  color: #a0aec0;
+  margin-bottom: 40px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.helpr-about-cta-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.helpr-about-cta-btn {
+  padding: 15px 40px;
+  font-size: 1.125rem;
+}
+
+/* Animations */
+@keyframes helpr-text-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes helpr-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes helpr-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes helpr-card-float {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes helpr-stat-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  70% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes helpr-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes helpr-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes helpr-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes helpr-cta-slide {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .helpr-about-hero-title {
+    font-size: 2.75rem;
+  }
+  
+  .helpr-about-section-title {
+    font-size: 2.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .helpr-about-hero {
+    padding: 80px 20px 60px;
+  }
+  
+  .helpr-about-hero-title {
+    font-size: 2.25rem;
+  }
+  
+  .helpr-about-hero-subtitle {
+    font-size: 1.125rem;
+  }
+  
+  .helpr-about-section {
+    padding: 60px 20px;
+  }
+  
+  .helpr-about-mission-card {
+    padding: 40px 30px;
+  }
+  
+  .helpr-about-step {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+  
+  .helpr-about-steps {
+    padding: 0 20px;
+  }
+  
+  .helpr-about-cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .helpr-about-cta-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .helpr-about-hero-title {
+    font-size: 1.875rem;
+  }
+  
+  .helpr-about-hero-graphic {
+    transform: scale(0.8);
+  }
+  
+  .helpr-about-provider-icon,
+  .helpr-about-connection-icon,
+  .helpr-about-customer-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.875rem;
+  }
+  
+  .helpr-about-provider-icon {
+    margin-right: 60px;
+  }
+  
+  .helpr-about-customer-icon {
+    margin-left: 60px;
+  }
+  
+  .helpr-about-stats-grid,
+  .helpr-about-values-grid,
+  .helpr-about-team-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .helpr-about-section-title {
+    font-size: 1.875rem;
+  }
+}
