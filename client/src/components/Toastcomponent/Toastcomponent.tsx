@@ -74,7 +74,7 @@ function Toastcomponent() {
       <div 
         className={`toast-card ${type}`}
         style={{ 
-          '--toast-color': color,
+          '--toast-color': color ?? undefined,
         } as React.CSSProperties}
       >
         {/* Decorative background elements */}
@@ -118,7 +118,7 @@ function Toastcomponent() {
             className="progress-bar"
             style={{ 
               width: `${progress}%`,
-              backgroundColor: color
+              backgroundColor: color ?? undefined
             }}
           >
             <div className="progress-glow"></div>
