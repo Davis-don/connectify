@@ -1,7 +1,9 @@
+import './services.css'
+
 function Services() {
   return (
-    <div className="overall-servicespage-container">
-        <h1>Services page</h1>
+    <div className="overall-servicepage-container">
+      <h1>Welcome homepage</h1>
     </div>
   )
 }

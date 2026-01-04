@@ -97,6 +97,7 @@ const Header: React.FC<HeaderProps> = ({
     handleLinkClick(action, e);
   };
 
+
   return (
     <header className={`helpr-header-wrap ${className}`}>
       <div className="helpr-header-container">

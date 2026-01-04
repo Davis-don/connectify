@@ -2,8 +2,8 @@ import { Routes, Route } from "react-router-dom";
 
 import Home from "../pages/Home";
 import Services from "../pages/Services";
-import Category from "../pages/Category";
-import ServiceDetails from "../pages/ServiceDetails";
+// import Category from "../pages/Category";
+// import ServiceDetails from "../pages/ServiceDetails";
 import HowItWorks from "../pages/Howitworks";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
@@ -16,14 +16,11 @@ function AppRoutes() {
       {/* Home page */}
       <Route path="/" element={<MainLayout><Home /></MainLayout>} />
 
-      {/* Services overview */}
       <Route path="/services" element={<MainLayout><Services /></MainLayout>} />
-
-      {/* Dynamic category page */}
-      <Route path="/services/:category" element={<MainLayout><Category /></MainLayout>} />
+      {/* <Route path="/services/:category" element={<MainLayout><Category /></MainLayout>} /> */}
 
       {/* Dynamic service page */}
-      <Route path="/services/:category/:service" element={<MainLayout><ServiceDetails /></MainLayout>} />
+      {/* <Route path="/services/:category/:service" element={<MainLayout><ServiceDetails /></MainLayout>} /> */}
 
       {/* Other static pages */}
       <Route path="/how-it-works" element={<MainLayout><HowItWorks /></MainLayout>} />
