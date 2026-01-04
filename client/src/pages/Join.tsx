@@ -1,20 +1,23 @@
 import './join.css';
 import { ArrowRight, LogIn, UserPlus, Zap, Shield, Users, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 function Join() {
+  const navigate = useNavigate();
+
   const handleCreateAccount = () => {
-    // Navigate to signup
-    window.location.href = '/signup';
+    // Navigate to signup page
+    navigate('/signup');
   };
 
   const handleLogin = () => {
-    // Navigate to login
-    window.location.href = '/login';
+    // Navigate to login page
+    navigate('/login');
   };
 
   const handleGuestMode = () => {
-    // Handle guest mode
-    window.location.href = '/services';
+    // Navigate to services as guest
+    navigate('/services');
   };
 
   return (
