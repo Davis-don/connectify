@@ -10,7 +10,8 @@ import Contact from "../pages/Contact";
 import Join from "../pages/Join";
 import MainLayout from "../components/layout/MainLayout";
 import Dashboardlayout from "../components/layout/dashblayout/Dashboardlayout";
-
+import Loginpage from "../pages/Loginpage";
+import Signup from "../pages/Signup";
 function AppRoutes() {
   return (
     <Routes>
@@ -27,7 +28,9 @@ function AppRoutes() {
       <Route path="/how-it-works" element={<MainLayout><HowItWorks /></MainLayout>} />
       <Route path="/about" element={<MainLayout><About /></MainLayout>} />
       <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
-      <Route path="/join" element={<Dashboardlayout><Join/></Dashboardlayout>} />
+      <Route path="/join" element={<MainLayout><Join/></MainLayout>} />
+      <Route path="/login" element={<Dashboardlayout><Loginpage/></Dashboardlayout>} />
+      <Route path="/signup" element={<Dashboardlayout><Signup/></Dashboardlayout>} />
     </Routes>
   );
 }
