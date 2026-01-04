@@ -9,6 +9,7 @@ import About from "../pages/About";
 import Contact from "../pages/Contact";
 import Join from "../pages/Join";
 import MainLayout from "../components/layout/MainLayout";
+import Dashboardlayout from "../components/layout/dashblayout/Dashboardlayout";
 
 function AppRoutes() {
   return (
@@ -26,7 +27,7 @@ function AppRoutes() {
       <Route path="/how-it-works" element={<MainLayout><HowItWorks /></MainLayout>} />
       <Route path="/about" element={<MainLayout><About /></MainLayout>} />
       <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
-      <Route path="/join" element={<MainLayout><Join /></MainLayout>} />
+      <Route path="/join" element={<Dashboardlayout><Join/></Dashboardlayout>} />
     </Routes>
   );
 }
