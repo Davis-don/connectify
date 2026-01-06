@@ -11,4 +11,5 @@ urlpatterns = [
 
     # Refresh access token
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('fetch-service-provider/', views.FetchUserData, name='service-provider-fetch'),
 ]

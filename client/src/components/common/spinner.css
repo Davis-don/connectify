@@ -1,0 +1,102 @@
+/* Spinner Component Styles */
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.spinner {
+  position: relative;
+  border: 4px solid rgba(67, 97, 238, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid #4361ee;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  border: 2px solid rgba(67, 97, 238, 0.1);
+  border-radius: 50%;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Size variations */
+.spinner.small {
+  width: 20px;
+  height: 20px;
+  border-width: 3px;
+}
+
+.spinner.medium {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+}
+
+.spinner.large {
+  width: 60px;
+  height: 60px;
+  border-width: 5px;
+}
+
+/* Color variations */
+.spinner.primary {
+  border-top-color: #4361ee;
+}
+
+.spinner.white {
+  border-top-color: #ffffff;
+}
+
+.spinner.success {
+  border-top-color: #10b981;
+}
+
+.spinner.danger {
+  border-top-color: #ef4444;
+}
+
+/* Responsive spinner */
+@media (max-width: 768px) {
+  .spinner.medium {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .spinner.large {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+
+/* Add to existing Spinner.css */
+
+.spinner-container.small .spinner {
+  width: 20px !important;
+  height: 20px !important;
+  border-width: 3px !important;
+}
+
+.spinner-container.medium .spinner {
+  width: 40px !important;
+  height: 40px !important;
+  border-width: 4px !important;
+}
+
+.spinner-container.large .spinner {
+  width: 60px !important;
+  height: 60px !important;
+  border-width: 5px !important;
+}

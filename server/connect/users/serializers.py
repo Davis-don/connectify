@@ -45,7 +45,7 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password')
 
         user = User.objects.create(
-            username=email,              # still required internally
+            username=email,
             email=email,
             first_name=first_name,
             last_name=last_name,
@@ -76,7 +76,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        # Add extra response fields here
         data.update({
             'email': self.user.email,
             'role': self.user.role,
@@ -85,3 +84,36 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         })
 
         return data
+
+
+# =====================================================
+# 🔽 ADDITION ONLY — FETCH LOGGED-IN USER VIA JWT TOKEN
+# =====================================================
+
+class ServiceProviderReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceProvider
+        fields = [
+            'id',
+            'phone_number',
+            'company_name',
+        ]
+
+
+class AuthenticatedUserSerializer(serializers.ModelSerializer):
+    """
+    Used when a valid JWT token is sent.
+    Returns user data tied to request.user
+    """
+    service_profile = ServiceProviderReadSerializer(read_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'email',
+            'first_name',
+            'last_name',
+            'role',
+            'service_profile',
+        ]

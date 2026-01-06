@@ -18,15 +18,17 @@ import {
   FaClock,
   FaChartBar,
   FaHandsHelping,
-  FaBell,
-  FaSignOutAlt,
   FaBars,
   FaTimes,
   FaArrowUp,
   FaArrowDown
 } from 'react-icons/fa';
 
-// Placeholder Components
+// Import separated components
+import ProviderProfileHeader from '../../components/serviceProvider/Providerprofileheader';
+import NotificationBell from '../../components/serviceProvider/Notificationbell';
+
+// Placeholder Components (these will be separate files later)
 const DashboardOverview = () => (
   <div className="svp-component-container">
     <h1 className="svp-component-title">Dashboard Overview</h1>
@@ -138,22 +140,12 @@ const ServiceProviderDashboard = () => {
   // Get token store and toast store
   const {
     clearTokens,
-    getFirstName,
-    getLastName,
     getRole,
     isAuthenticated,
     tokenData
   } = useTokenStore();
   
   const { showToast } = useToast();
-  
-  // Get user data from token store
-  const firstName = getFirstName() || 'Service';
-  const lastName = getLastName() || 'Provider';
-  
-  // Generate initials from first and last name
-  const userInitials = `${firstName?.charAt(0) || 'S'}${lastName?.charAt(0) || 'P'}`;
-  const userName = `${firstName} ${lastName}`;
 
   // Handle logout
   const handleLogout = () => {
@@ -244,11 +236,6 @@ const ServiceProviderDashboard = () => {
     if (!isDesktop) {
       setSidebarOpen(false);
     }
-  };
-
-  const handleNotificationClick = () => {
-    showToast('You have 5 new notifications', 'info', 3);
-    // In production: show notifications dropdown
   };
 
   const renderComponent = () => {
@@ -419,7 +406,7 @@ const ServiceProviderDashboard = () => {
             onClick={handleLogout}
             aria-label="Logout"
           >
-            <FaSignOutAlt />
+            <i className="fas fa-sign-out-alt"></i>
             <span>Logout</span>
           </button>
         </div>
@@ -446,24 +433,11 @@ const ServiceProviderDashboard = () => {
           </div>
 
           <div className="svp-header-right">
-            <div className="svp-notification-wrapper">
-              <button 
-                className="svp-notification-bell" 
-                onClick={handleNotificationClick}
-                aria-label="Notifications"
-              >
-                <FaBell />
-                <span className="svp-notification-badge"></span>
-              </button>
-            </div>
-
-            <div className="svp-user-profile">
-              <div className="svp-user-avatar">{userInitials}</div>
-              <div className="svp-user-info">
-                <span className="svp-user-name">{userName}</span>
-                <span className="svp-user-role">Service Provider</span>
-              </div>
-            </div>
+            {/* Notification Bell Component */}
+            <NotificationBell />
+            
+            {/* Provider Profile Header Component */}
+            <ProviderProfileHeader />
           </div>
         </header>
 

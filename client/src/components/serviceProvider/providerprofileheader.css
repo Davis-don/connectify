@@ -1,0 +1,237 @@
+/* Provider Profile Header Styles */
+.svp-user-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px 8px 8px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  min-width: 0;
+  background: white;
+}
+
+.svp-user-profile:hover {
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.svp-user-profile.loading {
+  background: transparent;
+  cursor: default;
+}
+
+.svp-user-profile.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.svp-user-profile.error:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.svp-user-avatar {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #4361ee, #3a0ca3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.svp-user-profile:hover .svp-user-avatar {
+  transform: scale(1.05);
+}
+
+.svp-user-avatar.skeleton {
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svp-user-avatar.error-avatar {
+  background: #ef4444;
+  color: white;
+  font-weight: 800;
+  font-size: 20px;
+}
+
+.svp-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.svp-user-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 160px;
+  transition: color 0.2s ease;
+}
+
+.svp-user-profile:hover .svp-user-name {
+  color: #4361ee;
+}
+
+.svp-user-name.error-text {
+  color: #dc2626;
+}
+
+.svp-user-role {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: #f1f5f9;
+  border-radius: 20px;
+  margin-top: 2px;
+  transition: all 0.2s ease;
+}
+
+.svp-user-profile:hover .svp-user-role {
+  background: rgba(67, 97, 238, 0.1);
+  color: #4361ee;
+}
+
+.svp-user-role.active {
+  color: #059669;
+  background: #d1fae5;
+}
+
+.svp-user-role.active::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #059669;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.svp-user-role.error-subtext {
+  color: #dc2626;
+  background: #fecaca;
+  font-size: 12px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Skeleton loading animation */
+.skeleton-text {
+  background: #e2e8f0;
+  border-radius: 4px;
+  height: 14px;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.skeleton-text:nth-child(2) {
+  width: 80px;
+  margin-top: 6px;
+}
+
+/* Pulse animation for skeleton */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.skeleton {
+  animation: pulse 1.5s infinite;
+}
+
+/* Tooltip for truncated text */
+.svp-user-profile {
+  position: relative;
+}
+
+.svp-user-profile .svp-user-name[title]:hover::after,
+.svp-user-profile .svp-user-avatar[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.svp-user-profile .svp-user-name[title]:hover::after {
+  bottom: -30px;
+}
+
+/* Responsive styles */
+@media (max-width: 1023px) {
+  .svp-user-profile {
+    padding: 6px 12px 6px 6px;
+  }
+  
+  .svp-user-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+  
+  .svp-user-name {
+    font-size: 14px;
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 767px) {
+  .svp-user-info {
+    display: none;
+  }
+  
+  .svp-user-profile {
+    padding: 4px;
+  }
+  
+  .svp-user-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .svp-user-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+}
