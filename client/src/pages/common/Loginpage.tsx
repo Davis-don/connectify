@@ -1,4 +1,4 @@
-import Loginserviceaccount from "../components/Loginserviceaccount/Loginserviceaccount"
+import Loginserviceaccount from "../../components/Loginserviceaccount/Loginserviceaccount"
 
 function Loginpage() {
   return (

@@ -2,6 +2,7 @@ import './createserviceaccount.css';
 import { useState, useEffect, useRef } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { 
   FaUser, 
   FaEnvelope, 
@@ -36,10 +37,12 @@ interface FormErrors {
 
 function Createserviceaccount() {
   const showToast = useToast(state => state.showToast);
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
+  const [redirectTimer, setRedirectTimer] = useState<number | null>(null);
 
   const [formData, setFormData] = useState<CreateAccountData>({
     first_name: '',
@@ -54,6 +57,15 @@ function Createserviceaccount() {
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [showCompanyField, setShowCompanyField] = useState(false);
   const [activeField, setActiveField] = useState<string | null>(null);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (redirectTimer) {
+        clearTimeout(redirectTimer);
+      }
+    };
+  }, [redirectTimer]);
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -167,6 +179,8 @@ function Createserviceaccount() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   // Create account mutation
   const createAccountMutation = useMutation<
     any,
@@ -175,7 +189,7 @@ function Createserviceaccount() {
   >({
     mutationFn: async (data: CreateAccountData) => {
       const response = await fetch(
-        `http://localhost:8000/users/create-service-provider/`,
+        `${apiUrl}/users/create-service-provider/`,
         {
           method: 'POST',
           headers: {
@@ -205,12 +219,16 @@ function Createserviceaccount() {
       setIsSuccess(true);
       
       // Show success toast
+      let toastMessage = 'Account created successfully!';
+      let toastDuration = 5; // seconds
+      
       if (data.message && data.message.includes('verification')) {
-        showToast('Account created! Please check your email for verification.', 'success', 5);
-      } else {
-        showToast('Account created successfully!', 'success', 5);
+        toastMessage = 'Account created! Please check your email for verification.';
+        toastDuration = 7; // Give more time for email verification message
       }
-
+      
+      showToast(toastMessage, 'success', toastDuration);
+      
       // Reset form after success
       setTimeout(() => {
         setFormData({
@@ -222,8 +240,15 @@ function Createserviceaccount() {
         });
         setConfirmPassword('');
         setShowCompanyField(false);
+      }, 3000);
+
+      // Set timer to navigate to login after toast disappears
+      const timer = setTimeout(() => {
+        navigate('/login');
         setIsSuccess(false);
-      }, 5000);
+      }, toastDuration * 1000 + 500); // Add 500ms buffer for toast animation
+
+      setRedirectTimer(timer);
     },
 
     onError: (error) => {
@@ -338,6 +363,15 @@ function Createserviceaccount() {
     }
   };
 
+  // Handle manual navigation to login
+  const handleNavigateToLogin = () => {
+    if (redirectTimer) {
+      clearTimeout(redirectTimer);
+    }
+    navigate('/login');
+    setIsSuccess(false);
+  };
+
   return (
     <div className="create-account-container" ref={formRef}>
       {/* Mobile Scroll Indicator */}
@@ -362,6 +396,7 @@ function Createserviceaccount() {
           <div className="success-details">
             <p><FaCheckCircle className="success-bullet" /> Your service provider account has been created</p>
             <p><FaCheckCircle className="success-bullet" /> You can now log in and start offering your services</p>
+            <p><FaCheckCircle className="success-bullet" /> Redirecting to login page in a few seconds...</p>
           </div>
           <div className="success-actions">
             <button 
@@ -370,6 +405,12 @@ function Createserviceaccount() {
               disabled={isLoading}
             >
               Create Another Account
+            </button>
+            <button 
+              className="login-btn"
+              onClick={handleNavigateToLogin}
+            >
+              Go to Login Now
             </button>
           </div>
         </div>

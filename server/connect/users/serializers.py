@@ -1,15 +1,23 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User, ServiceProvider
 
+
 class ServiceProviderSerializer(serializers.ModelSerializer):
-    # User fields (input only, write-only)
+    # User fields (write-only)
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(
+        write_only=True,
+        min_length=8,
+        style={'input_type': 'password'}
+    )
 
-    # Optional company name field
-    company_name = serializers.CharField(required=False, allow_blank=True)
+    company_name = serializers.CharField(
+        required=False,
+        allow_blank=True
+    )
 
     class Meta:
         model = ServiceProvider
@@ -20,32 +28,60 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
             'email',
             'password',
             'phone_number',
-            'company_name',  # included to save in DB
+            'company_name',
         ]
 
+    def validate_email(self, email):
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError(
+                'A user with this email already exists.'
+            )
+        return email
+
     def create(self, validated_data):
-        # Extract user-related data
         first_name = validated_data.pop('first_name')
         last_name = validated_data.pop('last_name')
         email = validated_data.pop('email')
         password = validated_data.pop('password')
 
-        # Create User with forced role
         user = User.objects.create(
-            username=email,
+            username=email,              # still required internally
+            email=email,
             first_name=first_name,
             last_name=last_name,
-            email=email,
-            role='service_provider'  # ✅ backend sets role automatically
+            role='service_provider'
         )
         user.set_password(password)
         user.save()
 
-        # Create ServiceProvider profile
         service_provider = ServiceProvider.objects.create(
             user=user,
             phone_number=validated_data.get('phone_number'),
-            company_name=validated_data.get('company_name')  # ✅ store company name
+            company_name=validated_data.get('company_name')
         )
 
         return service_provider
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = 'email'
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['email'] = user.email
+        token['role'] = user.role
+        return token
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        # Add extra response fields here
+        data.update({
+            'email': self.user.email,
+            'role': self.user.role,
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name,
+        })
+
+        return data

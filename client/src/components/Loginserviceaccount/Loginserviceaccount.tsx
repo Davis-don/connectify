@@ -2,6 +2,7 @@ import './loginserviceaccount.css';
 import { useState, useEffect, useRef } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { 
   FaEnvelope, 
   FaLock, 
@@ -14,11 +15,20 @@ import {
   FaShieldAlt
 } from 'react-icons/fa';
 import { useToast } from '../../../store/toastStore';
+import { useTokenStore } from '../../../store/tokenStore';
 
 interface LoginData {
   email: string;
   password: string;
-  remember_me?: boolean;
+}
+
+interface TokenResponse {
+  refresh: string;
+  access: string;
+  email: string;
+  role: string;
+  first_name: string;
+  last_name: string;
 }
 
 interface FormErrors {
@@ -26,14 +36,27 @@ interface FormErrors {
   password?: string;
 }
 
+interface ApiErrorResponse {
+  detail?: string;
+  message?: string;
+  email?: string[];
+  password?: string[];
+  non_field_errors?: string[];
+}
+
 function Loginserviceaccount() {
   const showToast = useToast(state => state.showToast);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const { setTokens } = useTokenStore();
+  const navigate = useNavigate();
+  
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const formRef = useRef<HTMLDivElement>(null);
+  const [redirectTimer, setRedirectTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [userRole, setUserRole] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
 
   const [formData, setFormData] = useState<LoginData>({
     email: '',
@@ -43,55 +66,55 @@ function Loginserviceaccount() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [activeField, setActiveField] = useState<string | null>(null);
 
-  // Check if mobile on mount and resize
+  // Cleanup timer on unmount
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    // Add floating label effect on mobile
-    const handleFocus = (e: FocusEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-        setActiveField(target.getAttribute('name'));
-        // Scroll to active field on mobile
-        if (isMobile && formRef.current) {
-          setTimeout(() => {
-            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }, 100);
-        }
+    return () => {
+      if (redirectTimer) {
+        clearTimeout(redirectTimer);
       }
     };
+  }, [redirectTimer]);
 
-    const handleBlur = () => {
-      setActiveField(null);
-    };
-
-    document.addEventListener('focusin', handleFocus);
-    document.addEventListener('focusout', handleBlur);
-    
-    // Check for saved credentials
-    const savedEmail = localStorage.getItem('service_account_email');
-    const savedPassword = localStorage.getItem('service_account_password');
-    const savedRemember = localStorage.getItem('service_account_remember');
-    
-    if (savedRemember === 'true' && savedEmail && savedPassword) {
-      setFormData({
-        email: savedEmail,
-        password: savedPassword
-      });
-      setRememberMe(true);
-    }
-    
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-      document.removeEventListener('focusin', handleFocus);
-      document.removeEventListener('focusout', handleBlur);
-    };
-  }, [isMobile]);
+  // Check if mobile on mount and resize
+    useEffect(() => {
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+      
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+      
+      // Add floating label effect on mobile
+      const handleFocus = (e: Event) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+          const fieldName = target.getAttribute('name');
+          if (fieldName) {
+            setActiveField(fieldName);
+          }
+          // Scroll to active field on mobile
+          if (isMobile && formRef.current) {
+            setTimeout(() => {
+              target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+          }
+        }
+      };
+  
+      const handleBlur = () => {
+        setActiveField(null);
+      };
+  
+      document.addEventListener('focusin', handleFocus);
+      document.addEventListener('focusout', handleBlur);
+      
+      return () => {
+        window.removeEventListener('resize', checkMobile);
+        document.removeEventListener('focusin', handleFocus);
+        document.removeEventListener('focusout', handleBlur);
+      };
+    }, [isMobile]);
 
   // Validation function
   const validateForm = (): boolean => {
@@ -108,23 +131,49 @@ function Loginserviceaccount() {
     // Password validation
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  // Helper function to get dashboard path based on role
+  const getDashboardPath = (role: string): string => {
+    switch (role) {
+      case 'service_provider':
+        return '/service-provider/dashboard';
+      case 'client':
+        return '/client/dashboard';
+      case 'admin':
+        return '/admin/dashboard';
+      default:
+        return '/unauthorized';
+    }
+  };
+
+  // Helper function to get personalized welcome message
+    const getWelcomeMessage = (role: string, firstName: string): string => {
+      const roleTitles: Record<string, string> = {
+        service_provider: 'Service Provider',
+        client: 'Client',
+        admin: 'Administrator'
+      };
+      
+      const title = roleTitles[role] || 'User';
+      return `Welcome back, ${firstName} — ${title}`;
+    };
+
   // Login mutation
   const loginMutation = useMutation<
-    any,
+    TokenResponse,
     Error,
     LoginData
   >({
-    mutationFn: async (data: LoginData) => {
+    mutationFn: async (data: LoginData): Promise<TokenResponse> => {
       const response = await fetch(
-        `http://localhost:8000/users/login-service-provider/`,
+        `${apiUrl}/users/auth/token/`,
         {
           method: 'POST',
           headers: {
@@ -138,13 +187,39 @@ function Loginserviceaccount() {
         }
       );
 
-      const result = await response.json();
+      const result: ApiErrorResponse & TokenResponse = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || result.error || 'Login failed');
+        let errorMessage = 'Login failed';
+        
+        if (result.detail) {
+          errorMessage = result.detail;
+        } else if (result.non_field_errors && result.non_field_errors.length > 0) {
+          errorMessage = result.non_field_errors[0];
+        } else if (result.message) {
+          errorMessage = result.message;
+        } else if (result.email && result.email.length > 0) {
+          errorMessage = result.email[0];
+        } else if (result.password && result.password.length > 0) {
+          errorMessage = result.password[0];
+        }
+        
+        throw new Error(errorMessage);
       }
 
-      return result;
+      // Type guard to ensure we have all required fields
+      if (!result.access || !result.refresh || !result.email || !result.role || !result.first_name || !result.last_name) {
+        throw new Error('Invalid response from server');
+      }
+
+      return {
+        refresh: result.refresh,
+        access: result.access,
+        email: result.email,
+        role: result.role,
+        first_name: result.first_name,
+        last_name: result.last_name
+      };
     },
 
     onMutate: () => {
@@ -156,32 +231,37 @@ function Loginserviceaccount() {
       setIsLoading(false);
       setIsSuccess(true);
       
-      // Save credentials if remember me is checked
-      if (rememberMe) {
-        localStorage.setItem('service_account_email', formData.email);
-        localStorage.setItem('service_account_password', formData.password);
-        localStorage.setItem('service_account_remember', 'true');
-      } else {
-        localStorage.removeItem('service_account_email');
-        localStorage.removeItem('service_account_password');
-        localStorage.setItem('service_account_remember', 'false');
-      }
+      // Store all user data in Zustand store
+      setTokens({
+        refresh: data.refresh,
+        access: data.access,
+        role: data.role,
+        email: data.email,
+        first_name: data.first_name,
+        last_name: data.last_name,
+      });
       
-      showToast('Login successful!', 'success', 3);
+      // Store role and name for UI display
+      setUserRole(data.role);
+      setUserName(`${data.first_name} ${data.last_name}`);
       
-      // Store auth token if returned
-      if (data.token) {
-        localStorage.setItem('service_auth_token', data.token);
-      }
+      // Show personalized welcome message
+      const welcomeMessage = getWelcomeMessage(data.role, data.first_name);
+      showToast(welcomeMessage, 'success', 3);
+      
+      // Get dashboard path based on role
+      const dashboardPath = getDashboardPath(data.role);
+      
+      // Wait for toast to finish before navigating (3 seconds + 500ms buffer)
+      const timer = setTimeout(() => {
+        navigate(dashboardPath);
+        setIsSuccess(false);
+      }, 3500); // 3.5 seconds (3 sec toast + 500ms buffer)
 
-      // Reset form after success
-      setTimeout(() => {
-        // Redirect to dashboard or perform next action
-        window.location.href = '/service-provider/dashboard';
-      }, 2000);
+      setRedirectTimer(timer);
     },
 
-    onError: (error) => {
+    onError: (error: Error) => {
       setIsLoading(false);
       showToast(error.message || 'Invalid email or password', 'error', 4);
     },
@@ -201,7 +281,7 @@ function Loginserviceaccount() {
     }
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (validateForm()) {
@@ -210,11 +290,6 @@ function Loginserviceaccount() {
         email: formData.email.trim().toLowerCase(),
         password: formData.password,
       };
-
-      // Add remember_me if checked
-      if (rememberMe) {
-        submitData.remember_me = true;
-      }
 
       loginMutation.mutate(submitData);
     } else {
@@ -238,6 +313,17 @@ function Loginserviceaccount() {
     }
   };
 
+  // Handle manual navigation to dashboard based on role
+  const handleNavigateToDashboard = () => {
+    if (redirectTimer) {
+      clearTimeout(redirectTimer);
+    }
+    // Navigate based on stored role
+    const dashboardPath = getDashboardPath(userRole);
+    navigate(dashboardPath);
+    setIsSuccess(false);
+  };
+
   return (
     <div className="login-account-container" ref={formRef}>
       {/* Mobile Scroll Indicator */}
@@ -258,14 +344,25 @@ function Loginserviceaccount() {
             <FaCheckCircle />
           </div>
           <h2>Login Successful!</h2>
-          <p className="login-success-subtitle">Welcome back to HELPR Service Provider</p>
+          <p className="login-success-subtitle">Welcome back, {userName}!</p>
           <div className="login-success-details">
+            <p><FaCheckCircle className="login-success-bullet" /> Role: {userRole === 'service_provider' ? 'Service Provider' : 
+                   userRole === 'client' ? 'Client' : 
+                   userRole === 'admin' ? 'Administrator' : userRole}</p>
             <p><FaCheckCircle className="login-success-bullet" /> Redirecting to your dashboard</p>
-            <p><FaCheckCircle className="login-success-bullet" /> Setting up your workspace</p>
+            <p><FaCheckCircle className="login-success-bullet" /> Setting up your workspace...</p>
           </div>
           <div className="login-loading">
             <div className="login-loading-spinner"></div>
-            <span>Please wait...</span>
+            <span>Please wait, redirecting in a few seconds...</span>
+          </div>
+          <div className="success-actions">
+            <button 
+              className="dashboard-btn"
+              onClick={handleNavigateToDashboard}
+            >
+              Go to Dashboard Now
+            </button>
           </div>
         </div>
       ) : (
@@ -364,19 +461,8 @@ function Loginserviceaccount() {
               )}
             </div>
 
-            {/* Remember Me & Forgot Password */}
+            {/* Forgot Password */}
             <div className="login-options">
-              <label className="login-remember-me">
-                <input 
-                  type="checkbox" 
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="login-remember-checkbox" 
-                  disabled={isLoading} 
-                />
-                <span className="login-remember-text">Remember me</span>
-              </label>
-              
               <button 
                 type="button"
                 className="login-forgot-password"

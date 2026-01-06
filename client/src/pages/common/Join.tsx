@@ -7,7 +7,7 @@ function Join() {
 
   const handleCreateAccount = () => {
     // Navigate to signup page
-    navigate('/signup');
+    navigate('/service-provider/create-account');
   };
 
   const handleLogin = () => {

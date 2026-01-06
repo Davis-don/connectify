@@ -1,4 +1,4 @@
-import Createserviceaccount from "../components/Createserviceaccount/Createserviceaccount"
+import Createserviceaccount from "../../components/Createserviceaccount/Createserviceaccount"
 
 function Signup() {
   return (
