@@ -1,0 +1,340 @@
+/* Profile Component Styles */
+.svp-profile-container {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+  min-height: 500px;
+  animation: svp-fadeIn 0.4s ease;
+}
+
+.svp-profile-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e2e8f0;
+  position: relative;
+}
+
+.svp-profile-title::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+  border-radius: 1px;
+}
+
+.svp-profile-content {
+  display: flex;
+  gap: 32px;
+}
+
+/* Sidebar */
+.svp-profile-sidebar {
+  flex: 0 0 280px;
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  height: fit-content;
+}
+
+.svp-profile-avatar {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.svp-avatar-placeholder {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 40px;
+  margin: 0 auto 16px;
+}
+
+.svp-profile-avatar h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.svp-profile-avatar p {
+  font-size: 14px;
+  color: #8b5cf6;
+  font-weight: 500;
+  background: #ede9fe;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+/* Profile Navigation */
+.svp-profile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.svp-nav-item {
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.svp-nav-item:hover {
+  background: white;
+  color: #1e293b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.svp-nav-item.active {
+  background: white;
+  color: #8b5cf6;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+}
+
+.svp-nav-item i {
+  font-size: 18px;
+  width: 24px;
+}
+
+/* Main Content */
+.svp-profile-main {
+  flex: 1;
+}
+
+.svp-profile-section {
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.svp-profile-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.svp-profile-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 24px;
+}
+
+/* Profile Form */
+.svp-profile-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.svp-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.svp-form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.svp-form-group input,
+.svp-form-group textarea {
+  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #1e293b;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.svp-form-group input:focus,
+.svp-form-group textarea:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.svp-form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.svp-form-group:nth-child(5),
+.svp-form-group:nth-child(6) {
+  grid-column: span 2;
+}
+
+/* Form Actions */
+.svp-form-actions {
+  grid-column: span 2;
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.svp-btn-primary {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 28px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.svp-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+.svp-btn-secondary {
+  background: white;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 28px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.svp-btn-secondary:hover {
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Preferences Grid */
+.svp-preferences-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.svp-preference-card {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.svp-preference-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border-color: #8b5cf6;
+}
+
+.svp-preference-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.svp-preference-card p {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 16px;
+}
+
+.svp-preference-btn {
+  background: #ede9fe;
+  color: #8b5cf6;
+  border: 1px solid #ddd6fe;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.svp-preference-btn:hover {
+  background: #8b5cf6;
+  color: white;
+  border-color: #8b5cf6;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .svp-profile-content {
+    flex-direction: column;
+  }
+  
+  .svp-profile-sidebar {
+    flex: none;
+  }
+  
+  .svp-profile-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .svp-form-group:nth-child(5),
+  .svp-form-group:nth-child(6) {
+    grid-column: span 1;
+  }
+  
+  .svp-form-actions {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .svp-profile-container {
+    padding: 24px;
+  }
+  
+  .svp-preferences-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .svp-profile-container {
+    padding: 20px;
+    border-radius: 16px;
+  }
+  
+  .svp-profile-title {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+  
+  .svp-form-actions {
+    flex-direction: column;
+  }
+}

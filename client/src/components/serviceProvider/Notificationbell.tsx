@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { FaBell } from 'react-icons/fa';
-import './NotificationBell.css';
+import './notificationbell.css'
 import { useTokenStore } from '../../../store/tokenStore';
 import Spinner from '../common/Spinner';
 

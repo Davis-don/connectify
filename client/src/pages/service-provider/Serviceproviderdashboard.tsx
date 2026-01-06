@@ -6,133 +6,26 @@ import { useToast } from '../../../store/toastStore';
 
 // Import React Icons
 import { 
-  FaChartPie, 
-  FaConciergeBell, 
-  FaCalendarCheck, 
-  FaWallet, 
-  FaUserCog, 
-  FaComments,
-  FaTools,
-  FaChartLine,
-  FaStar,
-  FaClock,
-  FaChartBar,
+  FaSignOutAlt,
   FaHandsHelping,
   FaBars,
   FaTimes,
-  FaArrowUp,
-  FaArrowDown
+  FaTachometerAlt,
+  FaTools,
+  FaCog,
+  FaCreditCard
 } from 'react-icons/fa';
 
 // Import separated components
 import ProviderProfileHeader from '../../components/serviceProvider/Providerprofileheader';
 import NotificationBell from '../../components/serviceProvider/Notificationbell';
-
-// Placeholder Components (these will be separate files later)
-const DashboardOverview = () => (
-  <div className="svp-component-container">
-    <h1 className="svp-component-title">Dashboard Overview</h1>
-    <div className="svp-stats-grid">
-      <div className="svp-stat-card">
-        <div className="svp-stat-header">
-          <span className="svp-stat-title">Active Services</span>
-          <div className="svp-stat-icon svp-stat-icon-1">
-            <FaTools />
-          </div>
-        </div>
-        <div className="svp-stat-value">24</div>
-        <div className="svp-stat-change svp-stat-change-positive">
-          <FaArrowUp />
-          <span>+8 this month</span>
-        </div>
-      </div>
-      
-      <div className="svp-stat-card">
-        <div className="svp-stat-header">
-          <span className="svp-stat-title">Total Revenue</span>
-          <div className="svp-stat-icon svp-stat-icon-2">
-            <FaChartLine />
-          </div>
-        </div>
-        <div className="svp-stat-value">$12,850</div>
-        <div className="svp-stat-change svp-stat-change-positive">
-          <FaArrowUp />
-          <span>+18% from last month</span>
-        </div>
-      </div>
-      
-      <div className="svp-stat-card">
-        <div className="svp-stat-header">
-          <span className="svp-stat-title">Client Rating</span>
-          <div className="svp-stat-icon svp-stat-icon-3">
-            <FaStar />
-          </div>
-        </div>
-        <div className="svp-stat-value">4.9</div>
-        <div className="svp-stat-change svp-stat-change-positive">
-          <FaArrowUp />
-          <span>+0.3 this week</span>
-        </div>
-      </div>
-      
-      <div className="svp-stat-card">
-        <div className="svp-stat-header">
-          <span className="svp-stat-title">Pending Bookings</span>
-          <div className="svp-stat-icon svp-stat-icon-4">
-            <FaClock />
-          </div>
-        </div>
-        <div className="svp-stat-value">14</div>
-        <div className="svp-stat-change svp-stat-change-negative">
-          <FaArrowDown />
-          <span>-3 from yesterday</span>
-        </div>
-      </div>
-    </div>
-    <div className="svp-placeholder-content">
-      <div className="svp-placeholder-icon">
-        <FaChartBar size={60} />
-      </div>
-      <div>
-        <h3>Advanced Analytics Coming Soon</h3>
-        <p>Detailed insights and performance metrics will be available here</p>
-      </div>
-    </div>
-  </div>
-);
-
-const ServicesManagement = () => (
-  <div className="svp-component-container">
-    <h1 className="svp-component-title">Services Management</h1>
-    <div className="svp-placeholder-content">
-      <div className="svp-placeholder-icon">
-        <FaConciergeBell size={60} />
-      </div>
-      <div>
-        <h3>Manage Your Services</h3>
-        <p>Add, edit, and manage all your service offerings from this panel</p>
-      </div>
-    </div>
-  </div>
-);
-
-const ProfileSettings = () => (
-  <div className="svp-component-container">
-    <h1 className="svp-component-title">Profile Settings</h1>
-    <div className="svp-placeholder-content">
-      <div className="svp-placeholder-icon">
-        <FaUserCog size={60} />
-      </div>
-      <div>
-        <h3>Account Configuration</h3>
-        <p>Update your profile, settings, and preferences</p>
-      </div>
-    </div>
-  </div>
-);
+import Overview from '../../components/serviceProvider/ServiceproviderdashOverview';
+import Services from '../../components/serviceProvider/Services';
+import Profile from '../../components/serviceProvider/Profile';
+import Billings from '../../components/serviceProvider/Billings';
 
 const ServiceProviderDashboard = () => {
-  const [activeComponent, setActiveComponent] = useState('dashboard');
+  const [activeComponent, setActiveComponent] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1400);
   const navigate = useNavigate();
@@ -240,14 +133,16 @@ const ServiceProviderDashboard = () => {
 
   const renderComponent = () => {
     switch (activeComponent) {
-      case 'dashboard':
-        return <DashboardOverview />;
+      case 'overview':
+        return <Overview />;
       case 'services':
-        return <ServicesManagement />;
+        return <Services />;
       case 'profile':
-        return <ProfileSettings />;
+        return <Profile />;
+      case 'billings':
+        return <Billings />;
       default:
-        return <DashboardOverview />;
+        return <Overview />;
     }
   };
 
@@ -259,42 +154,43 @@ const ServiceProviderDashboard = () => {
   // Menu items data with React Icons
   const menuItems = [
     {
-      id: 'dashboard',
-      icon: FaChartPie,
-      label: 'Dashboard',
-      active: activeComponent === 'dashboard'
+      id: 'overview',
+      icon: FaTachometerAlt,
+      label: 'Overview',
+      active: activeComponent === 'overview',
+      description: 'Dashboard analytics'
     },
     {
       id: 'services',
-      icon: FaConciergeBell,
-      label: 'My Services',
+      icon: FaTools,
+      label: 'Services',
       badge: '24',
-      active: activeComponent === 'services'
-    },
-    {
-      id: 'bookings',
-      icon: FaCalendarCheck,
-      label: 'Bookings',
-      badge: '14'
-    },
-    {
-      id: 'earnings',
-      icon: FaWallet,
-      label: 'Earnings'
+      active: activeComponent === 'services',
+      description: 'Manage your services'
     },
     {
       id: 'profile',
-      icon: FaUserCog,
-      label: 'Profile Settings',
-      active: activeComponent === 'profile'
+      icon: FaCog,
+      label: 'Profile',
+      active: activeComponent === 'profile',
+      description: 'Account settings'
     },
     {
-      id: 'messages',
-      icon: FaComments,
-      label: 'Messages',
-      badge: '8'
+      id: 'billings',
+      icon: FaCreditCard,
+      label: 'Billings',
+      badge: '5',
+      active: activeComponent === 'billings',
+      description: 'Payments & invoices'
     }
   ];
+
+  const pageTitles = {
+    overview: 'Dashboard Overview',
+    services: 'Services Management',
+    profile: 'Profile Settings',
+    billings: 'Billing & Payments'
+  };
 
   return (
     <div className="svp-dashboard-container">
@@ -313,16 +209,16 @@ const ServiceProviderDashboard = () => {
             </div>
             <div>
               <div className="svp-logo-text">HELPR</div>
-              <div className="svp-logo-subtext">PROVIDER PORTAL</div>
+              <div className="svp-logo-subtext">PROVIDER DASHBOARD</div>
             </div>
           </div>
         </div>
 
         <div className="svp-nav-section">
           <div className="svp-nav-group">
-            <div className="svp-nav-group-title">MAIN</div>
+            <div className="svp-nav-group-title">Navigation</div>
             <ul className="svp-nav-list">
-              {menuItems.slice(0, 2).map((item) => (
+              {menuItems.map((item) => (
                 <li key={item.id} className="svp-nav-item">
                   <a
                     href="#"
@@ -331,62 +227,7 @@ const ServiceProviderDashboard = () => {
                       e.preventDefault();
                       handleMenuItemClick(item.id);
                     }}
-                  >
-                    <span className="svp-nav-icon">
-                      <item.icon />
-                    </span>
-                    <span className="svp-nav-text">{item.label}</span>
-                    {item.badge && <span className="svp-nav-badge">{item.badge}</span>}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="svp-nav-group">
-            <div className="svp-nav-group-title">SERVICES</div>
-            <ul className="svp-nav-list">
-              {menuItems.slice(2, 4).map((item) => (
-                <li key={item.id} className="svp-nav-item">
-                  <a
-                    href="#"
-                    className="svp-nav-link"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (item.id === 'bookings') {
-                        showToast('Bookings feature coming soon!', 'info', 3);
-                      } else {
-                        showToast('Earnings dashboard coming soon!', 'info', 3);
-                      }
-                    }}
-                  >
-                    <span className="svp-nav-icon">
-                      <item.icon />
-                    </span>
-                    <span className="svp-nav-text">{item.label}</span>
-                    {item.badge && <span className="svp-nav-badge">{item.badge}</span>}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="svp-nav-group">
-            <div className="svp-nav-group-title">ACCOUNT</div>
-            <ul className="svp-nav-list">
-              {menuItems.slice(4).map((item) => (
-                <li key={item.id} className="svp-nav-item">
-                  <a
-                    href="#"
-                    className={`svp-nav-link ${item.active ? 'svp-nav-link-active' : ''}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (item.id === 'profile') {
-                        handleMenuItemClick('profile');
-                      } else {
-                        showToast('Messages feature coming soon!', 'info', 3);
-                      }
-                    }}
+                    title={item.description}
                   >
                     <span className="svp-nav-icon">
                       <item.icon />
@@ -406,7 +247,7 @@ const ServiceProviderDashboard = () => {
             onClick={handleLogout}
             aria-label="Logout"
           >
-            <i className="fas fa-sign-out-alt"></i>
+            <FaSignOutAlt />
             <span>Logout</span>
           </button>
         </div>
@@ -426,9 +267,7 @@ const ServiceProviderDashboard = () => {
               {sidebarOpen ? <FaTimes /> : <FaBars />}
             </button>
             <h1 className="svp-page-title">
-              {activeComponent === 'dashboard' && 'Dashboard Overview'}
-              {activeComponent === 'services' && 'Services Management'}
-              {activeComponent === 'profile' && 'Profile Settings'}
+              {pageTitles[activeComponent as keyof typeof pageTitles]}
             </h1>
           </div>
 
