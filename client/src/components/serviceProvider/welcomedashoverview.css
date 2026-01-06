@@ -1,105 +1,66 @@
-/* Welcome Dashoverview Component Styles */
+/* Welcome Dashoverview Component Styles - Simplified */
 .spdo-welcome-container {
-  background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
-  border-radius: 24px;
-  padding: 48px;
-  color: white;
-  margin-bottom: 32px;
-  box-shadow: 0 20px 60px rgba(67, 97, 238, 0.3);
-  animation: spdo-slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-  overflow: hidden;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 16px;
+  padding: 32px;
+  color: #1e293b;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  animation: spdo-fadeIn 0.5s ease-out;
 }
 
-.spdo-welcome-container::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 100%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: spdo-particle-float 20s linear infinite;
+.spdo-welcome-container.error {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-color: #fca5a5;
 }
 
-@keyframes spdo-slideIn {
+@keyframes spdo-fadeIn {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.95);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes spdo-particle-float {
-  0% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  100% {
-    transform: translate(50px, 50px) rotate(360deg);
+    transform: translateY(0);
   }
 }
 
 .spdo-welcome-header {
   display: flex;
-  align-items: flex-start;
-  gap: 24px;
-  margin-bottom: 40px;
-}
-
-.spdo-welcome-icon {
-  width: 72px;
-  height: 72px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-.spdo-welcome-icon.animated {
-  animation: spdo-icon-pulse 2s infinite;
+.spdo-welcome-sparkle {
+  color: #4361ee;
+  animation: spdo-sparkle 2s infinite;
 }
 
-@keyframes spdo-icon-pulse {
+@keyframes spdo-sparkle {
   0%, 100% {
+    opacity: 1;
     transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
   }
   50% {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    opacity: 0.7;
+    transform: scale(1.1);
   }
-}
-
-.spdo-welcome-text {
-  flex: 1;
 }
 
 .spdo-welcome-title {
-  font-size: 42px;
-  font-weight: 800;
-  margin-bottom: 16px;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: #1e293b;
   line-height: 1.2;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(90deg, #ffffff, #e2e8f0);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .spdo-user-name {
-  color: #ffffff;
-  -webkit-text-fill-color: #ffffff;
-  font-weight: 900;
+  color: #4361ee;
+  font-weight: 800;
   position: relative;
-  display: inline-block;
 }
 
 .spdo-user-name::after {
@@ -108,43 +69,42 @@
   bottom: -2px;
   left: 0;
   width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, #4cc9f0, #7209b7);
-  border-radius: 2px;
-  animation: spdo-underline 3s infinite;
+  height: 2px;
+  background: linear-gradient(90deg, #4361ee, #3a0ca3);
+  border-radius: 1px;
+  animation: spdo-underline 3s ease-in-out infinite;
 }
 
 @keyframes spdo-underline {
   0%, 100% {
-    width: 100%;
+    transform: scaleX(1);
     opacity: 1;
   }
   50% {
-    width: 50%;
+    transform: scaleX(0.8);
     opacity: 0.7;
   }
 }
 
-.spdo-typewriter-container {
+.spdo-typewriter {
   position: relative;
-  margin-bottom: 24px;
+  min-height: 28px;
 }
 
 .spdo-welcome-message {
-  font-size: 22px;
-  line-height: 1.6;
-  margin-bottom: 8px;
-  opacity: 0.95;
-  min-height: 35px;
-  display: inline-block;
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 0;
+  color: #64748b;
   font-weight: 500;
+  display: inline-block;
 }
 
 .spdo-cursor {
   display: inline-block;
-  margin-left: 4px;
+  margin-left: 2px;
   animation: spdo-cursor-blink 1s infinite;
-  color: #4cc9f0;
+  color: #4361ee;
   font-weight: bold;
 }
 
@@ -157,399 +117,63 @@
   }
 }
 
-.spdo-company-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 8px 16px;
-  border-radius: 50px;
-  font-size: 14px;
-  font-weight: 500;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Features Grid */
-.spdo-welcome-features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  margin-bottom: 40px;
-}
-
-.spdo-feature-item {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  position: relative;
-  overflow: hidden;
-}
-
-.spdo-feature-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transition: left 0.6s;
-}
-
-.spdo-feature-item:hover {
-  background: rgba(255, 255, 255, 0.12);
-  transform: translateY(-8px) scale(1.02);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-}
-
-.spdo-feature-item:hover::before {
-  left: 100%;
-}
-
-.spdo-feature-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 0;
-}
-
-.spdo-feature-icon.performance {
-  background: linear-gradient(135deg, rgba(76, 201, 240, 0.2), rgba(114, 9, 183, 0.2));
-  color: #4cc9f0;
-}
-
-.spdo-feature-icon.booking {
-  background: linear-gradient(135deg, rgba(248, 113, 113, 0.2), rgba(239, 68, 68, 0.2));
-  color: #f87171;
-}
-
-.spdo-feature-icon.quality {
-  background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(16, 185, 129, 0.2));
-  color: #34d399;
-}
-
-.spdo-feature-text h3 {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: white;
-  line-height: 1.3;
-}
-
-.spdo-feature-text p {
-  font-size: 16px;
-  line-height: 1.6;
-  opacity: 0.85;
-  color: #e2e8f0;
-}
-
-/* Welcome Actions */
-.spdo-welcome-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 32px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.spdo-action-stats {
-  display: flex;
-  gap: 32px;
-  flex-wrap: wrap;
-}
-
-.spdo-stat-item {
+/* Loading State */
+.spdo-loading-greeting {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 15px;
-  font-weight: 500;
-  opacity: 0.9;
+  color: #64748b;
 }
 
-.spdo-stat-icon {
-  color: #4cc9f0;
-}
-
-.spdo-get-started-button {
-  background: linear-gradient(135deg, #4cc9f0, #7209b7);
+/* Error State */
+.spdo-retry-button {
+  margin-top: 16px;
+  background: #4361ee;
   color: white;
   border: none;
-  padding: 16px 32px;
-  border-radius: 16px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 24px rgba(76, 201, 240, 0.3);
-}
-
-.spdo-get-started-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(76, 201, 240, 0.4);
-}
-
-.spdo-get-started-button:active {
-  transform: translateY(-1px);
-}
-
-/* Loading States */
-.spdo-welcome-container.loading {
-  animation: none;
-}
-
-.spdo-loading-content {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 40px;
-}
-
-.spdo-loading-spinner {
-  width: 72px;
-  height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.spdo-loading-text {
-  flex: 1;
-}
-
-.spdo-skeleton-title {
-  width: 60%;
-  height: 48px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  margin-bottom: 16px;
-  animation: spdo-skeleton-pulse 1.5s infinite;
-}
-
-.spdo-skeleton-message {
-  width: 80%;
-  height: 28px;
-  background: rgba(255, 255, 255, 0.08);
+  padding: 8px 16px;
   border-radius: 8px;
-  animation: spdo-skeleton-pulse 1.5s infinite 0.2s;
-}
-
-.spdo-feature-item.skeleton .spdo-feature-icon {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.spdo-skeleton-icon {
-  width: 24px;
-  height: 24px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  animation: spdo-skeleton-pulse 1.5s infinite;
-}
-
-.spdo-skeleton-heading {
-  width: 60%;
-  height: 22px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  margin-bottom: 12px;
-  animation: spdo-skeleton-pulse 1.5s infinite 0.4s;
-}
-
-.spdo-skeleton-paragraph {
-  width: 90%;
-  height: 16px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 4px;
-  animation: spdo-skeleton-pulse 1.5s infinite 0.6s;
-}
-
-@keyframes spdo-skeleton-pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-/* Error States */
-.spdo-welcome-container.error {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-}
-
-.spdo-error-content {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.spdo-error-icon {
-  width: 72px;
-  height: 72px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.spdo-error-symbol {
-  font-size: 32px;
-  font-weight: 800;
-  color: white;
-}
-
-.spdo-error-text {
-  flex: 1;
-}
-
-.spdo-error-title {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: white;
-}
-
-.spdo-error-message {
-  font-size: 16px;
-  line-height: 1.6;
-  opacity: 0.9;
-  margin-bottom: 20px;
-}
-
-.spdo-retry-button {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 12px 24px;
-  border-radius: 12px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  transition: background 0.2s ease;
 }
 
 .spdo-retry-button:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
+  background: #3a0ca3;
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-  .spdo-welcome-title {
-    font-size: 36px;
-  }
-  
-  .spdo-welcome-message {
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .spdo-welcome-container {
-    padding: 40px 32px;
-  }
-  
-  .spdo-welcome-features {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .spdo-welcome-actions {
-    flex-direction: column;
-    gap: 24px;
-    align-items: stretch;
-  }
-  
-  .spdo-action-stats {
-    justify-content: center;
-  }
-}
-
 @media (max-width: 768px) {
   .spdo-welcome-container {
-    padding: 32px 24px;
-    border-radius: 20px;
-  }
-  
-  .spdo-welcome-header {
-    flex-direction: column;
-    gap: 20px;
-    text-align: center;
-  }
-  
-  .spdo-welcome-icon {
-    align-self: center;
-  }
-  
-  .spdo-welcome-title {
-    font-size: 32px;
-  }
-  
-  .spdo-welcome-message {
-    font-size: 18px;
-  }
-  
-  .spdo-welcome-features {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  .spdo-feature-item {
     padding: 24px;
-  }
-  
-  .spdo-feature-icon {
-    width: 56px;
-    height: 56px;
-  }
-}
-
-@media (max-width: 480px) {
-  .spdo-welcome-container {
-    padding: 24px 20px;
+    border-radius: 12px;
   }
   
   .spdo-welcome-title {
-    font-size: 28px;
+    font-size: 24px;
   }
   
   .spdo-welcome-message {
     font-size: 16px;
   }
-  
-  .spdo-company-badge {
-    width: 100%;
-    justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .spdo-welcome-container {
+    padding: 20px;
   }
   
-  .spdo-action-stats {
-    flex-direction: column;
-    gap: 16px;
-    align-items: center;
+  .spdo-welcome-title {
+    font-size: 22px;
   }
   
-  .spdo-get-started-button {
-    width: 100%;
-    justify-content: center;
+  .spdo-welcome-header {
+    gap: 8px;
+  }
+  
+  .spdo-welcome-sparkle {
+    width: 20px;
+    height: 20px;
   }
 }
