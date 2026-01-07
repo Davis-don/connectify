@@ -3,6 +3,9 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User, ServiceProvider
 
 
+# =====================================================
+# 🔽 CREATE SERVICE PROVIDER SERIALIZER
+# =====================================================
 class ServiceProviderSerializer(serializers.ModelSerializer):
     # User fields (write-only)
     first_name = serializers.CharField(write_only=True)
@@ -63,6 +66,9 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
         return service_provider
 
 
+# =====================================================
+# 🔽 JWT TOKEN SERIALIZER
+# =====================================================
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     username_field = 'email'
 
@@ -87,9 +93,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 # =====================================================
-# 🔽 ADDITION ONLY — FETCH LOGGED-IN USER VIA JWT TOKEN
+# 🔽 READ SERIALIZER FOR SERVICE PROFILE
 # =====================================================
-
 class ServiceProviderReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceProvider
@@ -100,11 +105,10 @@ class ServiceProviderReadSerializer(serializers.ModelSerializer):
         ]
 
 
+# =====================================================
+# 🔽 FETCH AUTHENTICATED USER
+# =====================================================
 class AuthenticatedUserSerializer(serializers.ModelSerializer):
-    """
-    Used when a valid JWT token is sent.
-    Returns user data tied to request.user
-    """
     service_profile = ServiceProviderReadSerializer(read_only=True)
 
     class Meta:
@@ -117,3 +121,88 @@ class AuthenticatedUserSerializer(serializers.ModelSerializer):
             'role',
             'service_profile',
         ]
+
+
+# =====================================================
+# 🔽 UPDATE USER INFO SERIALIZER (FIXED VERSION)
+# =====================================================
+class UpdateUserInfoSerializer(serializers.ModelSerializer):
+    # User fields
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+    email = serializers.EmailField(required=False)
+    
+    # ServiceProvider fields - these come directly from request data
+    phone_number = serializers.CharField(required=False, write_only=True)
+    company_name = serializers.CharField(required=False, allow_blank=True, write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'phone_number', 'company_name']
+
+    def validate_email(self, email):
+        user = self.instance
+        if User.objects.exclude(id=user.id).filter(email=email).exists():
+            raise serializers.ValidationError("A user with this email already exists.")
+        return email
+
+    def update(self, instance, validated_data):
+        # Extract ServiceProvider fields
+        phone_number = validated_data.pop('phone_number', None)
+        company_name = validated_data.pop('company_name', None)
+        
+        # Update User fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        # Update username to match email if email is being updated
+        if 'email' in validated_data:
+            instance.username = validated_data['email']
+        
+        instance.save()
+
+        # Update ServiceProvider fields if exists
+        try:
+            profile = instance.service_profile
+            if phone_number is not None:
+                profile.phone_number = phone_number
+            if company_name is not None:
+                profile.company_name = company_name
+            profile.save()
+        except ServiceProvider.DoesNotExist:
+            # Create ServiceProfile if it doesn't exist (shouldn't happen for service providers)
+            ServiceProvider.objects.create(
+                user=instance,
+                phone_number=phone_number or '',
+                company_name=company_name or ''
+            )
+
+        return instance
+
+
+# =====================================================
+# 🔽 UPDATE PASSWORD SERIALIZER
+# =====================================================
+class UpdatePasswordSerializer(serializers.Serializer):
+    previous_password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+    new_password = serializers.CharField(write_only=True, style={'input_type': 'password'}, min_length=8)
+    confirm_password = serializers.CharField(write_only=True, style={'input_type': 'password'}, min_length=8)
+
+    def validate(self, attrs):
+        user = self.context['request'].user
+        prev = attrs.get('previous_password')
+        new = attrs.get('new_password')
+        confirm = attrs.get('confirm_password')
+
+        if not user.check_password(prev):
+            raise serializers.ValidationError({"previous_password": "Previous password is incorrect."})
+        if new != confirm:
+            raise serializers.ValidationError({"confirm_password": "New password and confirm password do not match."})
+        return attrs
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        new_password = self.validated_data['new_password']
+        user.set_password(new_password)
+        user.save()
+        return user

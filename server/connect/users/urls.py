@@ -12,4 +12,9 @@ urlpatterns = [
     # Refresh access token
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('fetch-service-provider/', views.FetchUserData, name='service-provider-fetch'),
+     # Update user info
+    path('update-info/', views.UpdateUserInfo, name='update-user-info'),
+
+    # Update password
+    path('update-password/', views.UpdateUserPassword, name='update-user-password'),
 ]
