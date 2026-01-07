@@ -6,6 +6,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import (
     ServiceProviderSerializer,
+    SystemManagerSerializer,
     MyTokenObtainPairSerializer,
     AuthenticatedUserSerializer,
     UpdateUserInfoSerializer,
@@ -21,16 +22,26 @@ from .serializers import (
 def NewServiceProvider(request):
     serializer = ServiceProviderSerializer(data=request.data)
     if serializer.is_valid():
-        service_provider = serializer.save()
-        return Response(
-            ServiceProviderSerializer(service_provider).data,
-            status=status.HTTP_201_CREATED
-        )
-    else:
-        return Response(
-            {"error": "All fields are required."},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        provider = serializer.save()
+        return Response(ServiceProviderSerializer(provider).data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# =====================================================
+# 🔽 CREATE NEW SYSTEM MANAGER (Admin/Agent)
+# =====================================================
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def NewSystemManager(request):
+    # Only admins can create other managers
+    if request.user.role != 'admin':
+        return Response({"error": "You do not have permission to create system managers."}, status=status.HTTP_403_FORBIDDEN)
+
+    serializer = SystemManagerSerializer(data=request.data)
+    if serializer.is_valid():
+        manager = serializer.save()
+        return Response(SystemManagerSerializer(manager).data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # =====================================================
@@ -41,27 +52,21 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 # =====================================================
-# 🔽 FETCH LOGGED-IN USER DATA (JWT REQUIRED)
+# 🔽 FETCH LOGGED-IN USER DATA
 # =====================================================
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def FetchUserData(request):
-    """
-    Returns authenticated user data based on JWT token
-    """
     serializer = AuthenticatedUserSerializer(request.user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # =====================================================
-# 🔽 UPDATE USER INFO (JWT REQUIRED)
+# 🔽 UPDATE USER INFO
 # =====================================================
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def UpdateUserInfo(request):
-    """
-    Updates any user info fields: first_name, last_name, email, phone_number, company_name
-    """
     serializer = UpdateUserInfoSerializer(instance=request.user, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
@@ -70,14 +75,11 @@ def UpdateUserInfo(request):
 
 
 # =====================================================
-# 🔽 UPDATE USER PASSWORD (JWT REQUIRED)
+# 🔽 UPDATE USER PASSWORD
 # =====================================================
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def UpdateUserPassword(request):
-    """
-    Updates user password after validating previous password and matching new password + confirm password
-    """
     serializer = UpdatePasswordSerializer(data=request.data, context={'request': request})
     if serializer.is_valid():
         serializer.save()

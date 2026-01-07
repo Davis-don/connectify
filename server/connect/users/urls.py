@@ -16,5 +16,9 @@ urlpatterns = [
     path('update-info/', views.UpdateUserInfo, name='update-user-info'),
 
     # Update password
+    
     path('update-password/', views.UpdateUserPassword, name='update-user-password'),
+     # System Manager routes
+    # ---------------------------
+    path('create-system-manager/', views.NewSystemManager, name='system-manager-create'),
 ]

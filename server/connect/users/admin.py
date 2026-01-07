@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, ServiceProvider
+from .models import User, ServiceProvider, SystemManager
 
+# ---------------------------
 # Custom admin for User model
+# ---------------------------
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     # Show these fields in list view
@@ -18,8 +20,20 @@ class UserAdmin(BaseUserAdmin):
         ('Role Info', {'fields': ('role',)}),
     )
 
+
+# ---------------------------
 # Admin for ServiceProvider model
+# ---------------------------
 @admin.register(ServiceProvider)
 class ServiceProviderAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone_number', 'company_name')
+    search_fields = ('user__username', 'user__email', 'phone_number', 'company_name')
+
+
+# ---------------------------
+# Admin for SystemManager model
+# ---------------------------
+@admin.register(SystemManager)
+class SystemManagerAdmin(admin.ModelAdmin):
     list_display = ('user', 'phone_number')
-    search_fields = ('user__username', 'phone_number')
+    search_fields = ('user__username', 'user__email', 'phone_number')

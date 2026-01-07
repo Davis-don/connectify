@@ -15,6 +15,7 @@ import Loginpage from "../pages/common/Loginpage";
 import Signup from "../pages/common/Signup";
 import Serviceproviderdashboard from "../pages/service-provider/Serviceproviderdashboard";
 import RoleProtectedRoute from "../components/protected/Protectedroutes";
+import AdminDashboard from "../pages/Adminuser/Adminuserdashboard";
 import Unauthorized from "../pages/common/Unauthorized";
 function AppRoutes() {
   return (
@@ -39,6 +40,7 @@ function AppRoutes() {
         <Route path="/service-provider/create-account" element={<Dashboardlayout><Signup/></Dashboardlayout>} />
         <Route path="/unauthorized" element={<Unauthorized/>} />
         
+        
            {/* Service Provider */}
         <Route
           path="/service-provider/dashboard"
@@ -62,7 +64,7 @@ function AppRoutes() {
               <ClientDashboard />
             </RoleProtectedRoute>
           }
-        />
+        /> */}
 
         
         <Route
@@ -72,7 +74,7 @@ function AppRoutes() {
               <AdminDashboard />
             </RoleProtectedRoute>
           }
-        /> */}
+        />
 
       </Routes>
     </>

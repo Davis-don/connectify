@@ -1,44 +1,25 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import User, ServiceProvider
+from .models import User, ServiceProvider, SystemManager
 
 
 # =====================================================
 # 🔽 CREATE SERVICE PROVIDER SERIALIZER
 # =====================================================
 class ServiceProviderSerializer(serializers.ModelSerializer):
-    # User fields (write-only)
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)
-    password = serializers.CharField(
-        write_only=True,
-        min_length=8,
-        style={'input_type': 'password'}
-    )
-
-    company_name = serializers.CharField(
-        required=False,
-        allow_blank=True
-    )
+    password = serializers.CharField(write_only=True, min_length=8, style={'input_type': 'password'})
+    company_name = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = ServiceProvider
-        fields = [
-            'id',
-            'first_name',
-            'last_name',
-            'email',
-            'password',
-            'phone_number',
-            'company_name',
-        ]
+        fields = ['id', 'first_name', 'last_name', 'email', 'password', 'phone_number', 'company_name']
 
     def validate_email(self, email):
         if User.objects.filter(email=email).exists():
-            raise serializers.ValidationError(
-                'A user with this email already exists.'
-            )
+            raise serializers.ValidationError('A user with this email already exists.')
         return email
 
     def create(self, validated_data):
@@ -62,8 +43,51 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
             phone_number=validated_data.get('phone_number'),
             company_name=validated_data.get('company_name')
         )
-
         return service_provider
+
+
+# =====================================================
+# 🔽 CREATE SYSTEM MANAGER SERIALIZER
+# =====================================================
+class SystemManagerSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(write_only=True)
+    last_name = serializers.CharField(write_only=True)
+    email = serializers.EmailField(write_only=True)
+    password = serializers.CharField(write_only=True, min_length=8, style={'input_type': 'password'})
+
+    class Meta:
+        model = SystemManager
+        fields = ['id', 'first_name', 'last_name', 'email', 'password', 'phone_number']
+
+    def validate_email(self, email):
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError('A user with this email already exists.')
+        return email
+
+    def create(self, validated_data):
+        first_name = validated_data.pop('first_name')
+        last_name = validated_data.pop('last_name')
+        email = validated_data.pop('email')
+        password = validated_data.pop('password')
+
+        # Determine role from context or default to admin
+        role = validated_data.pop('role', 'admin')
+
+        user = User.objects.create(
+            username=email,
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+            role=role
+        )
+        user.set_password(password)
+        user.save()
+
+        manager = SystemManager.objects.create(
+            user=user,
+            phone_number=validated_data.get('phone_number')
+        )
+        return manager
 
 
 # =====================================================
@@ -81,58 +105,46 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
-
         data.update({
             'email': self.user.email,
             'role': self.user.role,
             'first_name': self.user.first_name,
             'last_name': self.user.last_name,
         })
-
         return data
 
 
 # =====================================================
-# 🔽 READ SERIALIZER FOR SERVICE PROFILE
+# 🔽 READ SERIALIZERS
 # =====================================================
 class ServiceProviderReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceProvider
-        fields = [
-            'id',
-            'phone_number',
-            'company_name',
-        ]
+        fields = ['id', 'phone_number', 'company_name']
 
 
-# =====================================================
-# 🔽 FETCH AUTHENTICATED USER
-# =====================================================
+class SystemManagerReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SystemManager
+        fields = ['id', 'phone_number']
+
+
 class AuthenticatedUserSerializer(serializers.ModelSerializer):
     service_profile = ServiceProviderReadSerializer(read_only=True)
+    system_profile = SystemManagerReadSerializer(read_only=True)
 
     class Meta:
         model = User
-        fields = [
-            'id',
-            'email',
-            'first_name',
-            'last_name',
-            'role',
-            'service_profile',
-        ]
+        fields = ['id', 'email', 'first_name', 'last_name', 'role', 'service_profile', 'system_profile']
 
 
 # =====================================================
-# 🔽 UPDATE USER INFO SERIALIZER (FIXED VERSION)
+# 🔽 UPDATE USER INFO SERIALIZER
 # =====================================================
 class UpdateUserInfoSerializer(serializers.ModelSerializer):
-    # User fields
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
-    
-    # ServiceProvider fields - these come directly from request data
     phone_number = serializers.CharField(required=False, write_only=True)
     company_name = serializers.CharField(required=False, allow_blank=True, write_only=True)
 
@@ -147,35 +159,33 @@ class UpdateUserInfoSerializer(serializers.ModelSerializer):
         return email
 
     def update(self, instance, validated_data):
-        # Extract ServiceProvider fields
         phone_number = validated_data.pop('phone_number', None)
         company_name = validated_data.pop('company_name', None)
-        
-        # Update User fields
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        
-        # Update username to match email if email is being updated
+
         if 'email' in validated_data:
             instance.username = validated_data['email']
-        
+
         instance.save()
 
-        # Update ServiceProvider fields if exists
+        # Update ServiceProvider or SystemManager profile
         try:
-            profile = instance.service_profile
-            if phone_number is not None:
-                profile.phone_number = phone_number
-            if company_name is not None:
-                profile.company_name = company_name
-            profile.save()
-        except ServiceProvider.DoesNotExist:
-            # Create ServiceProfile if it doesn't exist (shouldn't happen for service providers)
-            ServiceProvider.objects.create(
-                user=instance,
-                phone_number=phone_number or '',
-                company_name=company_name or ''
-            )
+            if instance.role == 'service_provider':
+                profile = instance.service_profile
+                if phone_number is not None:
+                    profile.phone_number = phone_number
+                if company_name is not None:
+                    profile.company_name = company_name
+                profile.save()
+            elif instance.role in ['admin', 'agent']:
+                profile = instance.system_profile
+                if phone_number is not None:
+                    profile.phone_number = phone_number
+                profile.save()
+        except (ServiceProvider.DoesNotExist, SystemManager.DoesNotExist):
+            pass
 
         return instance
 
@@ -202,7 +212,6 @@ class UpdatePasswordSerializer(serializers.Serializer):
 
     def save(self, **kwargs):
         user = self.context['request'].user
-        new_password = self.validated_data['new_password']
-        user.set_password(new_password)
+        user.set_password(self.validated_data['new_password'])
         user.save()
         return user
