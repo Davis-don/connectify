@@ -7,11 +7,13 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import (
     ServiceProviderSerializer,
     SystemManagerSerializer,
+    SystemManagerReadSerializer,
     MyTokenObtainPairSerializer,
     AuthenticatedUserSerializer,
     UpdateUserInfoSerializer,
     UpdatePasswordSerializer,
 )
+from .models import SystemManager
 
 
 # =====================================================
@@ -33,7 +35,6 @@ def NewServiceProvider(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def NewSystemManager(request):
-    # Only admins can create other managers
     if request.user.role != 'admin':
         return Response({"error": "You do not have permission to create system managers."}, status=status.HTTP_403_FORBIDDEN)
 
@@ -52,12 +53,27 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 # =====================================================
-# 🔽 FETCH LOGGED-IN USER DATA
+# 🔽 FETCH LOGGED-IN SERVICE PROVIDER DATA
 # =====================================================
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def FetchUserData(request):
     serializer = AuthenticatedUserSerializer(request.user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# =====================================================
+# 🔽 FETCH LOGGED-IN SYSTEM MANAGER DATA
+# =====================================================
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def FetchSystemManagerData(request):
+    try:
+        manager = request.user.system_profile  # OneToOneField
+    except SystemManager.DoesNotExist:
+        return Response({"error": "System manager profile not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = SystemManagerReadSerializer(manager)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -85,3 +101,62 @@ def UpdateUserPassword(request):
         serializer.save()
         return Response({"message": "Password updated successfully."})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# =====================================================
+# 🔽 SYSTEM MANAGER CRUD VIEWS
+# =====================================================
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def GetAllSystemManagers(request):
+    if request.user.role != 'admin':
+        return Response({"error": "You do not have permission to view managers."}, status=status.HTTP_403_FORBIDDEN)
+
+    managers = SystemManager.objects.select_related('user').all()
+    serializer = SystemManagerReadSerializer(managers, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def GetSystemManagerById(request, pk):
+    try:
+        manager = SystemManager.objects.select_related('user').get(pk=pk)
+    except SystemManager.DoesNotExist:
+        return Response({"error": "System manager not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = SystemManagerReadSerializer(manager)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def UpdateSystemManager(request, pk):
+    if request.user.role != 'admin':
+        return Response({"error": "You do not have permission to update managers."}, status=status.HTTP_403_FORBIDDEN)
+
+    try:
+        manager = SystemManager.objects.select_related('user').get(pk=pk)
+    except SystemManager.DoesNotExist:
+        return Response({"error": "System manager not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = SystemManagerSerializer(manager, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def DeleteSystemManager(request, pk):
+    if request.user.role != 'admin':
+        return Response({"error": "You do not have permission to delete managers."}, status=status.HTTP_403_FORBIDDEN)
+
+    try:
+        manager = SystemManager.objects.get(pk=pk)
+    except SystemManager.DoesNotExist:
+        return Response({"error": "System manager not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    manager.user.delete()  # Also deletes the linked User
+    return Response({"message": "System manager deleted successfully"}, status=status.HTTP_204_NO_CONTENT)

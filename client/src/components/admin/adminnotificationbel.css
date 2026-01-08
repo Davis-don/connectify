@@ -1,0 +1,371 @@
+/* Admin Notification Bell Styles */
+.admn-wrapper {
+  position: relative;
+}
+
+.admn-bell {
+  width: 48px;
+  height: 48px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  color: #64748b;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.admn-bell:hover {
+  background: #8b5cf6;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+  border-color: #8b5cf6;
+}
+
+.admn-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-radius: 50%;
+  border: 2px solid white;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: admn-pulse 2s infinite;
+}
+
+@keyframes admn-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+/* Admin Notification Dropdown */
+.admn-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 998;
+}
+
+.admn-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 380px;
+  max-height: 500px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  z-index: 999;
+  overflow: hidden;
+  animation: admn-slideDown 0.2s ease;
+}
+
+@keyframes admn-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admn-header {
+  padding: 20px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admn-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.admn-mark-all {
+  background: none;
+  border: none;
+  color: #8b5cf6;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.admn-mark-all:hover {
+  background: rgba(139, 92, 246, 0.1);
+}
+
+/* Admin Notification List */
+.admn-list {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.admn-loading {
+  padding: 40px 20px;
+  text-align: center;
+  color: #64748b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.admn-loading-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: admn-spin 1s linear infinite;
+}
+
+@keyframes admn-spin {
+  to { transform: rotate(360deg); }
+}
+
+.admn-empty {
+  padding: 60px 20px;
+  text-align: center;
+  color: #94a3b8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.admn-empty-icon {
+  font-size: 32px;
+  opacity: 0.5;
+}
+
+/* Admin Notification Items */
+.admn-item {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.admn-item:hover {
+  background: #f8fafc;
+}
+
+.admn-item.unread {
+  background: rgba(139, 92, 246, 0.03);
+}
+
+.admn-item-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.admn-item.info .admn-item-icon {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+.admn-item.success .admn-item-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.admn-item.warning .admn-item-icon {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.admn-item.error .admn-item-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.admn-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.admn-title {
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admn-unread-dot {
+  width: 8px;
+  height: 8px;
+  background: #8b5cf6;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.admn-message {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admn-time {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* Admin Notification Footer */
+.admn-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.admn-view-all {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admn-view-all:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+}
+
+/* Admin Notification Error State */
+.admn-bell.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admn-bell.disabled:hover {
+  background: white;
+  color: #64748b;
+  transform: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: #e2e8f0;
+}
+
+.admn-error {
+  padding: 30px 20px;
+  text-align: center;
+  color: #dc2626;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.admn-error-icon {
+  width: 40px;
+  height: 40px;
+  background: #fecaca;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.admn-retry {
+  margin-top: 8px;
+  padding: 8px 16px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admn-retry:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+  .admn-dropdown {
+    width: 320px;
+    right: -20px;
+  }
+  
+  .admn-bell {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admn-dropdown {
+    width: 280px;
+    right: -40px;
+  }
+  
+  .admn-bell {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .admn-badge {
+    width: 18px;
+    height: 18px;
+    font-size: 9px;
+  }
+}

@@ -1,0 +1,237 @@
+/* Admin Profile Header Styles */
+.adm-user-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px 8px 8px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  min-width: 0;
+  background: white;
+}
+
+.adm-user-profile:hover {
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.adm-user-profile.loading {
+  background: transparent;
+  cursor: default;
+}
+
+.adm-user-profile.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.adm-user-profile.error:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.adm-user-avatar {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.adm-user-profile:hover .adm-user-avatar {
+  transform: scale(1.05);
+}
+
+.adm-user-avatar.skeleton {
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adm-user-avatar.error-avatar {
+  background: #ef4444;
+  color: white;
+  font-weight: 800;
+  font-size: 20px;
+}
+
+.adm-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.adm-user-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 160px;
+  transition: color 0.2s ease;
+}
+
+.adm-user-profile:hover .adm-user-name {
+  color: #8b5cf6;
+}
+
+.adm-user-name.error-text {
+  color: #dc2626;
+}
+
+.adm-user-role {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: #f1f5f9;
+  border-radius: 20px;
+  margin-top: 2px;
+  transition: all 0.2s ease;
+}
+
+.adm-user-profile:hover .adm-user-role {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+.adm-user-role.admin-active {
+  color: #7c3aed;
+  background: #ede9fe;
+}
+
+.adm-user-role.admin-active::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #7c3aed;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.adm-user-role.error-subtext {
+  color: #dc2626;
+  background: #fecaca;
+  font-size: 12px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Skeleton loading animation */
+.skeleton-text {
+  background: #e2e8f0;
+  border-radius: 4px;
+  height: 14px;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.skeleton-text:nth-child(2) {
+  width: 80px;
+  margin-top: 6px;
+}
+
+/* Pulse animation for skeleton */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.skeleton {
+  animation: pulse 1.5s infinite;
+}
+
+/* Tooltip for truncated text */
+.adm-user-profile {
+  position: relative;
+}
+
+.adm-user-profile .adm-user-name[title]:hover::after,
+.adm-user-profile .adm-user-avatar[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.adm-user-profile .adm-user-name[title]:hover::after {
+  bottom: -30px;
+}
+
+/* Responsive styles */
+@media (max-width: 1023px) {
+  .adm-user-profile {
+    padding: 6px 12px 6px 6px;
+  }
+  
+  .adm-user-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+  
+  .adm-user-name {
+    font-size: 14px;
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 767px) {
+  .adm-user-info {
+    display: none;
+  }
+  
+  .adm-user-profile {
+    padding: 4px;
+  }
+  
+  .adm-user-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .adm-user-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+}

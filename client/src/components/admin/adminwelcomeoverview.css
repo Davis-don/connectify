@@ -1,0 +1,179 @@
+/* Admin Welcome Overview Component Styles */
+.adwo-welcome-container {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 16px;
+  padding: 32px;
+  color: #1e293b;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  animation: adwo-fadeIn 0.5s ease-out;
+}
+
+.adwo-welcome-container.error {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-color: #fca5a5;
+}
+
+@keyframes adwo-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.adwo-welcome-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.adwo-welcome-sparkle {
+  color: #8b5cf6;
+  animation: adwo-sparkle 2s infinite;
+}
+
+@keyframes adwo-sparkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+.adwo-welcome-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: #1e293b;
+  line-height: 1.2;
+}
+
+.adwo-user-name {
+  color: #8b5cf6;
+  font-weight: 800;
+  position: relative;
+}
+
+.adwo-user-name::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+  border-radius: 1px;
+  animation: adwo-underline 3s ease-in-out infinite;
+}
+
+@keyframes adwo-underline {
+  0%, 100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleX(0.8);
+    opacity: 0.7;
+  }
+}
+
+.adwo-typewriter {
+  position: relative;
+  min-height: 28px;
+}
+
+.adwo-welcome-message {
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 0;
+  color: #64748b;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.adwo-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  animation: adwo-cursor-blink 1s infinite;
+  color: #8b5cf6;
+  font-weight: bold;
+}
+
+@keyframes adwo-cursor-blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Loading State */
+.adwo-loading-greeting {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #64748b;
+}
+
+/* Error State */
+.adwo-retry-button {
+  margin-top: 16px;
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.adwo-retry-button:hover {
+  background: #7c3aed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .adwo-welcome-container {
+    padding: 24px;
+    border-radius: 12px;
+  }
+  
+  .adwo-welcome-title {
+    font-size: 24px;
+  }
+  
+  .adwo-welcome-message {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .adwo-welcome-container {
+    padding: 20px;
+  }
+  
+  .adwo-welcome-title {
+    font-size: 22px;
+  }
+  
+  .adwo-welcome-header {
+    gap: 8px;
+  }
+  
+  .adwo-welcome-sparkle {
+    width: 20px;
+    height: 20px;
+  }
+}

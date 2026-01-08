@@ -70,7 +70,7 @@ class SystemManagerSerializer(serializers.ModelSerializer):
         email = validated_data.pop('email')
         password = validated_data.pop('password')
 
-        # Determine role from context or default to admin
+        # Default role is admin unless specified
         role = validated_data.pop('role', 'admin')
 
         user = User.objects.create(
@@ -88,6 +88,44 @@ class SystemManagerSerializer(serializers.ModelSerializer):
             phone_number=validated_data.get('phone_number')
         )
         return manager
+
+    def update(self, instance, validated_data):
+        """
+        Allow updating phone_number and user info
+        """
+        user_data = {}
+        if 'first_name' in validated_data:
+            user_data['first_name'] = validated_data.pop('first_name')
+        if 'last_name' in validated_data:
+            user_data['last_name'] = validated_data.pop('last_name')
+        if 'email' in validated_data:
+            user_data['email'] = validated_data.pop('email')
+            user_data['username'] = user_data['email']
+
+        # Update user
+        for attr, value in user_data.items():
+            setattr(instance.user, attr, value)
+        instance.user.save()
+
+        # Update manager
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
+
+# =====================================================
+# 🔽 SYSTEM MANAGER READ SERIALIZER
+# =====================================================
+class SystemManagerReadSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(source='user.email', read_only=True)
+    first_name = serializers.CharField(source='user.first_name', read_only=True)
+    last_name = serializers.CharField(source='user.last_name', read_only=True)
+    role = serializers.CharField(source='user.role', read_only=True)
+
+    class Meta:
+        model = SystemManager
+        fields = ['id', 'phone_number', 'email', 'first_name', 'last_name', 'role']
 
 
 # =====================================================
@@ -121,12 +159,6 @@ class ServiceProviderReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceProvider
         fields = ['id', 'phone_number', 'company_name']
-
-
-class SystemManagerReadSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SystemManager
-        fields = ['id', 'phone_number']
 
 
 class AuthenticatedUserSerializer(serializers.ModelSerializer):
