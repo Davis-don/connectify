@@ -1,0 +1,180 @@
+/* Add Service Category Styles */
+.asc-container {
+  padding: 32px;
+}
+
+.asc-header {
+  margin-bottom: 32px;
+}
+
+.asc-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.asc-description {
+  font-size: 15px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Form */
+.asc-form {
+  max-width: 600px;
+}
+
+.asc-error-message {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.asc-form-group {
+  margin-bottom: 24px;
+}
+
+.asc-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.asc-input,
+.asc-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.asc-input:focus,
+.asc-textarea:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.asc-input::placeholder,
+.asc-textarea::placeholder {
+  color: #94a3b8;
+}
+
+.asc-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Checkbox */
+.asc-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.asc-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #cbd5e1;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.asc-checkbox:checked {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+}
+
+.asc-checkbox-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.asc-hint {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 8px 0 0 32px;
+}
+
+/* Actions */
+.asc-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.asc-cancel-button,
+.asc-submit-button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.asc-cancel-button {
+  background: transparent;
+  border: 2px solid #cbd5e1;
+  color: #64748b;
+}
+
+.asc-cancel-button:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.asc-submit-button {
+  background: #8b5cf6;
+  border: 2px solid #8b5cf6;
+  color: white;
+}
+
+.asc-submit-button:hover:not(:disabled) {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  transform: translateY(-1px);
+}
+
+.asc-submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .asc-container {
+    padding: 24px;
+  }
+  
+  .asc-title {
+    font-size: 20px;
+  }
+  
+  .asc-actions {
+    flex-direction: column;
+  }
+  
+  .asc-cancel-button,
+  .asc-submit-button {
+    width: 100%;
+    text-align: center;
+  }
+}

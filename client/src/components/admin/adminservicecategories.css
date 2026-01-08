@@ -1,0 +1,143 @@
+/* Admin Service Categories Container */
+.admsc-container {
+  padding: 0;
+  background: transparent;
+  min-height: 100%;
+  animation: admsc-fadeIn 0.3s ease;
+}
+
+@keyframes admsc-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Header */
+.admsc-header {
+  margin-bottom: 32px;
+}
+
+.admsc-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.admsc-subtitle {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Navigation */
+.admsc-navigation {
+  margin-bottom: 24px;
+}
+
+.admsc-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 4px;
+}
+
+.admsc-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.admsc-tab:hover {
+  background: #f8fafc;
+  color: #475569;
+}
+
+.admsc-tab-active {
+  color: #8b5cf6;
+  font-weight: 600;
+}
+
+.admsc-tab-active::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #8b5cf6;
+  border-radius: 1px;
+}
+
+.admsc-tab-icon {
+  font-size: 18px;
+}
+
+.admsc-tab-text {
+  white-space: nowrap;
+}
+
+/* Content Area */
+.admsc-content {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admsc-title {
+    font-size: 24px;
+  }
+  
+  .admsc-subtitle {
+    font-size: 14px;
+  }
+  
+  .admsc-tab {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+  
+  .admsc-tab-icon {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admsc-tabs {
+    flex-direction: column;
+    border-bottom: none;
+    gap: 4px;
+  }
+  
+  .admsc-tab {
+    border-radius: 8px;
+    justify-content: center;
+    padding: 12px;
+  }
+  
+  .admsc-tab-active::after {
+    display: none;
+  }
+  
+  .admsc-tab-active {
+    background: rgba(139, 92, 246, 0.1);
+  }
+}
