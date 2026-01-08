@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './adminuserdashboard.css'
 import { useTokenStore } from '../../../store/tokenStore';
@@ -11,16 +11,18 @@ import {
   FaBars,
   FaTimes,
   FaTachometerAlt,
-  FaTools,
+  FaFolder,
+  FaTags,
   FaUsers,
   FaCog
 } from 'react-icons/fa';
 
-// Import admin components (you'll need to create these)
+// Import admin components
 import AdminProfileHeader from '../../components/admin/Adminprofileheader';
 import AdminNotificationBell from '../../components/admin/adminnotificationbell';
 import AdminOverview from '../../components/admin/Adminoverview';
-import AdminServices from '../../components/admin/Adminservices';
+import Adminservicecategories from '../../components/admin/Adminservicecategories';
+import AdminServiceTypes from '../../components/admin/Adminservicetypes'; 
 import AdminClients from '../../components/admin/Adminclients';
 import AdminSettings from '../../components/admin/Adminsettings';
 
@@ -135,8 +137,10 @@ const AdminDashboard = () => {
     switch (activeComponent) {
       case 'overview':
         return <AdminOverview />;
-      case 'services':
-        return <AdminServices />;
+      case 'categories':
+        return <Adminservicecategories />;
+      case 'types':
+        return <AdminServiceTypes />;
       case 'clients':
         return <AdminClients />;
       case 'settings':
@@ -151,7 +155,7 @@ const AdminDashboard = () => {
     return null;
   }
 
-  // Menu items data with React Icons
+  // Updated menu items data with new categories
   const menuItems = [
     {
       id: 'overview',
@@ -161,12 +165,20 @@ const AdminDashboard = () => {
       description: 'Admin dashboard analytics'
     },
     {
-      id: 'services',
-      icon: FaTools,
-      label: 'Services',
-      badge: '42',
-      active: activeComponent === 'services',
-      description: 'Manage all services'
+      id: 'categories',
+      icon: FaFolder,
+      label: 'Service Categories',
+      badge: '12',
+      active: activeComponent === 'categories',
+      description: 'Manage service categories'
+    },
+    {
+      id: 'types',
+      icon: FaTags,
+      label: 'Service Types',
+      badge: '24',
+      active: activeComponent === 'types',
+      description: 'Manage service types'
     },
     {
       id: 'clients',
@@ -187,7 +199,8 @@ const AdminDashboard = () => {
 
   const pageTitles = {
     overview: 'Admin Dashboard',
-    services: 'Services Management',
+    categories: 'Service Categories Management',
+    types: 'Service Types Management',
     clients: 'Client Management',
     settings: 'System Settings'
   };
