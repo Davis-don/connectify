@@ -71,7 +71,9 @@ function AppRoutes() {
           path="/admin/dashboard"
           element={
             <RoleProtectedRoute allowedRoles={["admin"]}>
+              <Dashboardlayout>
               <AdminDashboard />
+              </Dashboardlayout>
             </RoleProtectedRoute>
           }
         />
