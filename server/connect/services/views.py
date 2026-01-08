@@ -70,7 +70,7 @@ def DeleteServiceCategory(request, pk):
     category.delete()
     return Response(
         {"message": "Service category deleted successfully"},
-        status=status.HTTP_204_NO_CONTENT
+        status=status.HTTP_200_OK  # Change from 204_NO_CONTENT to 200_OK
     )
 
 

@@ -1,122 +1,234 @@
 import React, { useState } from 'react';
-import { FaTrash, FaExclamationTriangle, FaTimes, FaCheck } from 'react-icons/fa';
-import  './deletecategorycomponent.css'
+import { useMutation } from '@tanstack/react-query';
+import { 
+  FaTrash, 
+  FaExclamationTriangle, 
+  FaTimes, 
+  FaCheck, 
+  FaSpinner,
+  FaShieldAlt
+} from 'react-icons/fa';
+import { useTokenStore } from '../../../store/tokenStore';
+import { useToast } from '../../../store/toastStore';
+import './deletecategorycomponent.css';
 
 interface DeleteCategoryProps {
   categoryId: number;
   onClose: () => void;
+  onSuccess?: () => void;
+  onComplete?: () => void;
 }
 
-const DeleteCategory: React.FC<DeleteCategoryProps> = ({ categoryId, onClose }) => {
+interface DeleteResponse {
+  message?: string;
+  detail?: string;
+}
+
+interface DeleteError {
+  message: string;
+  detail?: string;
+}
+
+const DeleteCategory: React.FC<DeleteCategoryProps> = ({ 
+  categoryId, 
+  onClose,
+  onSuccess,
+  onComplete
+}) => {
+  const { getAccessToken } = useTokenStore();
+  const { showToast } = useToast();
+  
   const [confirmationText, setConfirmationText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const deleteCategoryMutation = useMutation<DeleteResponse, DeleteError>({
+    mutationFn: async (): Promise<DeleteResponse> => {
+      const token = getAccessToken();
+      
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/services/categories/${categoryId}/delete/`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        // Try to parse error response as JSON
+        let errorData: Partial<DeleteError> = {};
+        try {
+          const text = await response.text();
+          errorData = text ? (JSON.parse(text) as Partial<DeleteError>) : {};
+        } catch {
+          errorData = {};
+        }
+        
+        throw new Error(
+          errorData.detail || 
+          errorData.message || 
+          `Failed to delete category: ${response.status} ${response.statusText}`
+        );
+      }
+
+      // Check if response has content
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        // Parse JSON response if it exists
+        return await response.json();
+      } else {
+        // For 204 No Content or empty responses, return empty object
+        return {};
+      }
+    },
+
+    onMutate: () => {
+      setIsDeleting(true);
+    },
+
+    onSuccess: (data) => {
+      const successMessage = data.message || 'Category deleted successfully';
+      showToast(successMessage, 'success', 3);
+      
+      if (onSuccess) {
+        onSuccess();
+      }
+      
+      // Notify parent that operation is complete
+      if (onComplete) {
+        onComplete();
+      }
+    },
+
+    onError: (error: DeleteError) => {
+      setIsDeleting(false);
+      showToast(error.message || 'Failed to delete category', 'error', 4);
+      
+      // Notify parent that operation is complete (even on error)
+      if (onComplete) {
+        onComplete();
+      }
+    },
+  });
 
   const handleDelete = (e: React.FormEvent) => {
     e.preventDefault();
     
     if (confirmationText !== 'DELETE') {
-      alert(`Please type "DELETE" in the confirmation field to delete category with ID: ${categoryId}`);
+      showToast('Please type "DELETE" to confirm', 'error', 3);
       return;
     }
 
-    alert(`Delete confirmation successful!\n\nCategory ID: ${categoryId} will be deleted.\n\nIn the actual implementation, this would:\n1. Send DELETE request to API\n2. Handle success/error responses\n3. Show appropriate toast messages\n4. Refresh the categories list`);
-    onClose();
+    deleteCategoryMutation.mutate();
   };
 
   const handleClose = () => {
-    alert(`Delete operation cancelled for Category ID: ${categoryId}`);
-    onClose();
+    if (!isDeleting) {
+      onClose();
+    }
   };
 
   return (
-    <div className="delcat-container">
-      <div className="delcat-header">
-        <div className="delcat-header-icon">
-          <FaExclamationTriangle />
-        </div>
-        <div className="delcat-header-content">
-          <h2 className="delcat-title">Delete Category</h2>
-          <p className="delcat-subtitle">
-            Warning: This action cannot be undone
-          </p>
+    <div className="catdel-container">
+      {/* Header */}
+      <div className="catdel-header">
+        <div className="catdel-header-content">
+          <div className="catdel-header-icon">
+            <FaExclamationTriangle />
+          </div>
+          <div>
+            <h2 className="catdel-title">Delete Category</h2>
+            <p className="catdel-subtitle">
+              This action cannot be undone
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="delcat-content">
-        <div className="delcat-warning">
-          <div className="delcat-warning-icon">
-            ⚠️
+      {/* Content */}
+      <div className="catdel-content">
+        {/* Warning */}
+        <div className="catdel-warning">
+          <div className="catdel-warning-icon">
+            <FaShieldAlt />
           </div>
-          <h3 className="delcat-warning-title">Are you sure?</h3>
-          <p className="delcat-warning-text">
-            You are about to delete category with ID: <strong>{categoryId}</strong>
-          </p>
-          <p className="delcat-warning-details">
-            This will permanently remove the category from the system.
-            Any services associated with this category may be affected.
+          <h3 className="catdel-warning-title">Warning</h3>
+          <p className="catdel-warning-text">
+            Deleting category <strong>ID: {categoryId}</strong> will permanently remove it from the system.
           </p>
         </div>
 
-        <form onSubmit={handleDelete} className="delcat-form">
-          <div className="delcat-form-group">
-            <label htmlFor="confirmation" className="delcat-label">
-              Type <strong>DELETE</strong> to confirm
+        {/* Confirmation */}
+        <form onSubmit={handleDelete} className="catdel-form">
+          <div className="catdel-form-group">
+            <label className="catdel-label">
+              Type <span className="catdel-delete-text">DELETE</span> to confirm
             </label>
             <input
               type="text"
-              id="confirmation"
               value={confirmationText}
               onChange={(e) => setConfirmationText(e.target.value)}
-              className="delcat-input"
+              className="catdel-input"
               placeholder="Type DELETE here"
               autoComplete="off"
+              disabled={isDeleting}
+              autoFocus
             />
-            <div className="delcat-char-count">
+            <div className="catdel-input-status">
               {confirmationText === 'DELETE' ? (
-                <span className="delcat-valid">
-                  <FaCheck /> Confirmation text matches
+                <span className="catdel-input-valid">
+                  <FaCheck /> Ready to delete
                 </span>
               ) : (
-                <span className="delcat-invalid">
-                  Type exactly: DELETE
+                <span className="catdel-input-invalid">
+                  Type "DELETE" exactly as shown
                 </span>
               )}
             </div>
           </div>
 
-          <div className="delcat-consequences">
-            <h4 className="delcat-consequences-title">What will be deleted:</h4>
-            <ul className="delcat-consequences-list">
-              <li>📋 Category record with ID: {categoryId}</li>
-              <li>🗂️ All services under this category</li>
-              <li>📊 Related statistics and analytics</li>
-              <li>🚫 Cannot be recovered</li>
-            </ul>
-          </div>
-
-          <div className="delcat-actions">
+          {/* Actions */}
+          <div className="catdel-actions">
             <button
               type="button"
               onClick={handleClose}
-              className="delcat-cancel-btn"
+              className="catdel-cancel-btn"
+              disabled={isDeleting}
             >
               <FaTimes /> Cancel
             </button>
             <button
               type="submit"
-              className="delcat-delete-btn"
-              disabled={confirmationText !== 'DELETE'}
+              className="catdel-delete-btn"
+              disabled={confirmationText !== 'DELETE' || isDeleting}
             >
-              <FaTrash /> Delete Category
+              {isDeleting ? (
+                <>
+                  <FaSpinner className="catdel-delete-spinner" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <FaTrash /> Delete Category
+                </>
+              )}
             </button>
           </div>
         </form>
 
-        <div className="delcat-note">
-          <FaExclamationTriangle className="delcat-note-icon" />
-          <span>
-            Note: This is a demo component. In production, this would make an API call to delete the category.
-          </span>
-        </div>
+        {/* Status */}
+        {isDeleting && (
+          <div className="catdel-status">
+            <FaSpinner className="catdel-status-spinner" />
+            <span>Deleting category from database...</span>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -116,6 +116,32 @@ const ViewCategories: React.FC<ViewCategoriesProps> = ({ onAddNew, refreshTrigge
     enabled: isAuthenticated,
   });
 
+  // Handle update success - refresh data
+  const handleUpdateSuccess = () => {
+    // Refresh categories list
+    queryClient.invalidateQueries({ queryKey: ['serviceCategories'] });
+    refetch();
+  };
+
+  // Handle update completion (both success and error)
+  const handleUpdateComplete = () => {
+    // Close modal immediately so toast can be seen
+    setEditingCategoryId(null);
+  };
+
+  // Handle delete success - refresh data
+  const handleDeleteSuccess = () => {
+    // Refresh categories list
+    queryClient.invalidateQueries({ queryKey: ['serviceCategories'] });
+    refetch();
+  };
+
+  // Handle delete completion (both success and error)
+  const handleDeleteComplete = () => {
+    // Close modal immediately so toast can be seen
+    setDeletingCategoryId(null);
+  };
+
   // Auto-refresh when refreshTrigger changes (when new category is added)
   useEffect(() => {
     if (refreshTrigger > 0) {
@@ -223,12 +249,10 @@ const ViewCategories: React.FC<ViewCategoriesProps> = ({ onAddNew, refreshTrigge
 
   const handleEditClose = () => {
     setEditingCategoryId(null);
-    handleManualRefresh();
   };
 
   const handleDeleteClose = () => {
     setDeletingCategoryId(null);
-    handleManualRefresh();
   };
 
   const handlePageChange = (page: number) => {
@@ -312,10 +336,10 @@ const ViewCategories: React.FC<ViewCategoriesProps> = ({ onAddNew, refreshTrigge
           </p>
           <div className="cat-view-error-actions">
             <button onClick={handleRetry} className="cat-view-retry-btn">
-            <button onClick={handleRetry} className="cat-view-retry-btn">
               <FaSync className="cat-view-retry-icon" />
               Try Again
             </button>
+            <button onClick={onAddNew} className="cat-view-empty-primary-btn">
               <FaPlus /> Add Category Anyway
             </button>
           </div>
@@ -326,24 +350,43 @@ const ViewCategories: React.FC<ViewCategoriesProps> = ({ onAddNew, refreshTrigge
 
   return (
     <div className="cat-view-container">
-      {/* Modals */}
+      {/* Update Modal */}
       {editingCategoryId && (
         <div className="cat-view-modal-overlay">
           <div className="cat-view-modal">
+            <button 
+              className="cat-view-modal-close" 
+              onClick={handleEditClose}
+              aria-label="Close modal"
+            >
+              <FaTimes />
+            </button>
             <UpdateCategory
               categoryId={editingCategoryId}
               onClose={handleEditClose}
+              onSuccess={handleUpdateSuccess}
+              onComplete={handleUpdateComplete}
             />
           </div>
         </div>
       )}
       
+      {/* Delete Modal */}
       {deletingCategoryId && (
         <div className="cat-view-modal-overlay">
           <div className="cat-view-modal">
+            <button 
+              className="cat-view-modal-close" 
+              onClick={handleDeleteClose}
+              aria-label="Close modal"
+            >
+              <FaTimes />
+            </button>
             <DeleteCategory
               categoryId={deletingCategoryId}
               onClose={handleDeleteClose}
+              onSuccess={handleDeleteSuccess}
+              onComplete={handleDeleteComplete}
             />
           </div>
         </div>

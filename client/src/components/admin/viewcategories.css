@@ -1227,3 +1227,52 @@
     left: 20px;
   }
 }
+
+
+
+/* Modal improvements */
+.cat-view-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: cat-view-fadeIn 0.2s ease;
+}
+
+.cat-view-modal {
+  position: relative;
+  animation: cat-view-modalSlideIn 0.3s ease;
+}
+
+.cat-view-modal-close {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  background: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 10001;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.cat-view-modal-close:hover {
+  color: #ef4444;
+  transform: rotate(90deg);
+}
